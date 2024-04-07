@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dynamic Form</title>
+    <script src="/js/jquery-3.5.1.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <style>
+
+        /* Style for main container */
+        .main-warpper {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 48px;
+        }
+        .form-wrapper {
+            width: 80%;
+            background: white;
+        }
+
+        /* Style for input fields */
+        .input {
+            text-align: center;
+            width: 70%;
+            padding: 14px 22px;
+            
+            border-radius: 6px;
+            border: 1px solid #DDE3EC;
+            background: #FAFAFA;
+            font-weight: 500;
+            font-size: 16px;
+            color: #536387;
+            outline: none;
+            resize: none;
+        }
+        .input:focus {
+            border-color: #6a64f1;
+            box-shadow: 0px 3px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        /* Style for trash icon */
+        .delete-button {
+            border: none;
+            background: none;
+        }
+        .delete-button .fas.fa-trash {
+            color: rgb(215, 68, 68);
+            transition: color 0.2s, transform 0.2s;
+            cursor: pointer;
+        }
+        .delete-button .fas.fa-trash:hover {
+            color: rgb(173, 36, 36);
+            transform: scale(1.2);
+        }
+
+        /* Style for buttons */
+        .btn {
+            text-align: center;
+            width: 30%;
+            font-size: 16px;
+            border-radius: 5px;
+            padding: 14px 25px;
+            border: none;
+            font-weight: 500;
+            background-color: #6a64f1;
+            color: white;
+            cursor: pointer;
+            margin-top: 15px;
+        }
+        .btn:hover {
+            background-color: #5c56e8;
+            box-shadow: 0px 3px 8px rgba(0, 0, 0, 0.05);
+        }
+        .button-container {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        /* Style for question */
+        .question-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin: 10px 0;
+        }
+            
+        
+    </style>
+</head>
+<body>
+    <div class="main-warpper">
+        <div class="form-wrapper">
+            <form>
+                <div id="question-list">
+                    <div class="question-container">
+                        <input type="text" class="input" name="question1" placeholder="Enter question here" required>
+                        <button type="button" class="delete-button" onclick="removeInput(this)"><i class="fas fa-trash"></i></button>
+                    </div>  
+                </div>
+                
+                <div class="button-container">
+                    <button type="button" class="btn" onclick="addInput()">Add Question</button>
+                    <button type="submit" class="btn" >Submit</button>
+                </div>
+            </form> 
+        </div>       
+    </div>
+    
+
+    <script>
+        let questionCounter = 2;
+
+        function addInput() {
+            let newInput = `
+                <div class="question-container">
+                    <input type="text" class="input" name="question1" placeholder="Enter question here" required>
+                    <button type="button" class="delete-button" onclick="removeInput(this)"><i class="fas fa-trash"></i></button>
+                </div>
+            `;
+            $('#question-list').append(newInput);
+            questionCounter++;
+        }
+
+        function removeInput(element) {
+            $(element).parent().remove();
+        }
+
+        $('#dynamic-form').on('submit', function(e) {
+            e.preventDefault();
+            let formData = $(this).serializeArray();
+            console.log(formData);  // Replace this with your AJAX call to upload data to the server
+        });
+    </script>
+</body>
+</html>
