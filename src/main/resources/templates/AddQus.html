@@ -15,18 +15,15 @@
         }
         .form-wrapper {
             width: 80%;
-            background: white;
         }
 
         /* Style for input fields */
-        .input {
+        .input{
             text-align: center;
-            width: 70%;
-            padding: 14px 22px;
+            padding: 14px 60px;
             
             border-radius: 6px;
             border: 1px solid #DDE3EC;
-            background: #FAFAFA;
             font-weight: 500;
             font-size: 16px;
             color: #536387;
@@ -37,11 +34,38 @@
             border-color: #6a64f1;
             box-shadow: 0px 3px 8px rgba(0, 0, 0, 0.05);
         }
+        .input.option-input {
+            border: none;
+            border-bottom: 2px solid #ccc;
+            border-radius: 0;
+            padding: 4px 20px;
+            text-align: left;
+            width: 80%;
+        }
+        .input.option-input:focus {
+            border-color: #6a64f1;
+            box-shadow: none;
+        }
 
-        /* Style for trash icon */
-        .delete-button {
+        select{
+            padding: 14px 14px;
+
+            border-radius: 6px;
+            border: 1px solid #DDE3EC;
+            background: #ffffff;
+            font-weight: 500;
+            font-size: 16px;
+            text-align: center;
+            color: #536387;
+            outline: none;
+            cursor: pointer;
+        }
+
+        /* Style for trash and plus icon */
+        .delete-button, .add-button{
             border: none;
             background: none;
+            font-size: 20px;
         }
         .delete-button .fas.fa-trash {
             color: rgb(215, 68, 68);
@@ -52,11 +76,20 @@
             color: rgb(173, 36, 36);
             transform: scale(1.2);
         }
+        .add-button .fas.fa-plus {
+            color: rgb(68, 215, 68);
+            transition: color 0.2s, transform 0.2s;
+            cursor: pointer;
+        }
+        .add-button .fas.fa-plus:hover {
+            color: rgb(36, 173, 36);
+            transform: scale(1.2);
+        }
 
         /* Style for buttons */
         .btn {
             text-align: center;
-            width: 30%;
+            width: 15%;
             font-size: 16px;
             border-radius: 5px;
             padding: 14px 25px;
@@ -74,10 +107,28 @@
         .button-container {
             display: flex;
             justify-content: center;
+            gap: 30px;
+        }
+
+        .right-button-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
             gap: 10px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            background-color: #ffffff;
+            padding: 20px 10px;
         }
 
         /* Style for question */
+        .question-list {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
         .question-container {
             display: flex;
             align-items: center;
@@ -85,6 +136,36 @@
             gap: 10px;
             margin: 10px 0;
         }
+        
+        .question-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            background-color: #ffffff;
+            padding: 30px;
+        }
+        .question-content:focus-within {
+            border-left: 5px solid blue;
+        }
+
+            /* Style for options */
+        .option-list {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: start;
+            gap: 10px;
+        }
+
+
+        body {
+            background-color: #f6f1f7;
+        }
+
+        
             
         
     </style>
@@ -93,15 +174,34 @@
     <div class="main-warpper">
         <div class="form-wrapper">
             <form>
-                <div id="question-list">
+                <div id="question-list" class="question-list">
                     <div class="question-container">
-                        <input type="text" class="input" name="question1" placeholder="Enter question here" required>
-                        <button type="button" class="delete-button" onclick="removeInput(this)"><i class="fas fa-trash"></i></button>
+                        <div class="question-content">
+                            <div>
+                                <input type="text" class="input" name="question1" placeholder="Question" required>
+                                <select onchange="handleSelectChange(this)">
+                                    <option value="" selected disabled hidden>Select a type</option>
+                                    <option value="text">Short Question</option>
+                                    <option value="select">Multiple Choice</option>
+                                    <option value="likert">Linear Scale</option>
+                                </select>
+                            </div>
+                            
+                            <div id="option-list" class="option-list">
+                                <!-- Options will be added here -->
+                            </div>
+                        </div>
+
+                        <div class="right-button-container">
+                            <button type="button" class="delete-button" onclick="removeInput(this)"><i class="fas fa-trash"></i></button>
+                        <button type="button" class="add-button" onclick="addInput(this)"><i class="fas fa-plus"></i></button>
+                        </div>
+                        
                     </div>  
                 </div>
                 
                 <div class="button-container">
-                    <button type="button" class="btn" onclick="addInput()">Add Question</button>
+                    <button type="button" class="btn" onclick="addInputBottom()">Add</button>
                     <button type="submit" class="btn" >Submit</button>
                 </div>
             </form> 
@@ -110,21 +210,106 @@
     
 
     <script>
+
+        // Function to handle question add and remove
         let questionCounter = 2;
 
-        function addInput() {
+        function addInput(button) {
+            let questionContainer = button.parentElement.parentElement;
             let newInput = `
                 <div class="question-container">
-                    <input type="text" class="input" name="question1" placeholder="Enter question here" required>
-                    <button type="button" class="delete-button" onclick="removeInput(this)"><i class="fas fa-trash"></i></button>
-                </div>
+                    <div class="question-content">
+                        <div>
+                            <input type="text" class="input" name="question1" placeholder="Question" required>
+                            <select onchange="handleSelectChange(this)">
+                                <option value="" selected disabled hidden>Select a type</option>
+                                <option value="text">Short Question</option>
+                                <option value="select">Multiple Choice</option>
+                                <option value="likert">Linear Scale</option>
+                            </select>
+                        </div>
+                        
+                        <div id="option-list" class="option-list">
+                            <!-- Options will be added here -->
+                        </div>
+                    </div>
+            
+                    <div class="right-button-container">
+                        <button type="button" class="delete-button" onclick="removeInput(this)"><i class="fas fa-trash"></i></button>
+                        <button type="button" class="add-button" onclick="addInput(this)"><i class="fas fa-plus"></i></button>
+                    </div>
+                </div>  
+            `;
+            questionContainer.insertAdjacentHTML('afterend', newInput);
+            questionCounter++;
+        }
+
+        function addInputBottom() {
+            let newInput = `
+                <div class="question-container">
+                    <div class="question-content">
+                        <div>
+                            <input type="text" class="input" name="question1" placeholder="Question" required>
+                            <select onchange="handleSelectChange(this)">
+                                <option value="" selected disabled hidden>Select a type</option>
+                                <option value="text">Short Question</option>
+                                <option value="select">Multiple Choice</option>
+                                <option value="likert">Linear Scale</option>
+                            </select>
+                        </div>
+                        
+                        <div id="option-list" class="option-list">
+                            <!-- Options will be added here -->
+                        </div>
+                    </div>
+            
+                    <div class="right-button-container">
+                        <button type="button" class="delete-button" onclick="removeInput(this)"><i class="fas fa-trash"></i></button>
+                        <button type="button" class="add-button" onclick="addInput(this)"><i class="fas fa-plus"></i></button>
+                    </div>
+                </div>  
             `;
             $('#question-list').append(newInput);
             questionCounter++;
         }
 
         function removeInput(element) {
-            $(element).parent().remove();
+            $(element).parent().parent().remove();
+        }
+
+
+        // Function to handle select change
+        function handleSelectChange(selectElement) {
+            let questionContent = selectElement.parentElement.parentElement;
+            let optionList = questionContent.querySelector('#option-list');
+            while(optionList.firstChild) {
+                optionList.removeChild(optionList.firstChild);
+            }
+
+            if (selectElement.value === 'select') {
+                for (let i = 0; i < 4; i++) {  // Change this number to the number of options you want
+                    let newInput = document.createElement('input');
+                    newInput.type = 'text';
+                    newInput.className = 'input option-input';
+                    newInput.placeholder = 'Option ' + (i + 1);
+                    optionList.appendChild(newInput);
+                }
+            } else if (selectElement.value === 'likert') {
+                for (let i = 0; i < 2; i++) {
+                    let newInput = document.createElement('input');
+                    newInput.type = 'text';
+                    newInput.className = 'input option-input';
+                    newInput.placeholder = i === 0 ? 'Minimum label' : 'Maximum label';
+                    optionList.appendChild(newInput);
+                }
+            } else if (selectElement.value === 'text') {
+                let newInput = document.createElement('input');
+                newInput.type = 'text';
+                newInput.className = 'input option-input';
+                newInput.placeholder = 'Answer';
+                newInput.readOnly = true;  // Make the input read-only
+                optionList.appendChild(newInput);
+            }
         }
 
         $('#dynamic-form').on('submit', function(e) {
