@@ -47,6 +47,12 @@
             box-shadow: none;
         }
 
+        .input.title {
+            width: 68%;
+            box-sizing: border-box;
+        }
+
+
         select{
             padding: 14px 14px;
 
@@ -174,11 +180,14 @@
     <div class="main-warpper">
         <div class="form-wrapper">
             <form>
+                <div style="display: flex; justify-content: center;">
+                    <input type="text" class="input title" name="title" placeholder="Title" required>
+                </div>
                 <div id="question-list" class="question-list">
                     <div class="question-container">
                         <div class="question-content">
                             <div>
-                                <input type="text" class="input" name="question1" placeholder="Question" required>
+                                <input type="text" class="input" name="question" placeholder="Question" required>
                                 <select onchange="handleSelectChange(this)">
                                     <option value="" selected disabled hidden>Select a type</option>
                                     <option value="text">Short Question</option>
@@ -194,7 +203,7 @@
 
                         <div class="right-button-container">
                             <button type="button" class="delete-button" onclick="removeInput(this)"><i class="fas fa-trash"></i></button>
-                        <button type="button" class="add-button" onclick="addInput(this)"><i class="fas fa-plus"></i></button>
+                            <button type="button" class="add-button" onclick="addInput(this)"><i class="fas fa-plus"></i></button>
                         </div>
                         
                     </div>  
@@ -202,7 +211,7 @@
                 
                 <div class="button-container">
                     <button type="button" class="btn" onclick="addInputBottom()">Add</button>
-                    <button type="submit" class="btn" >Submit</button>
+                    <button type="submit" class="btn" value="Submit">Submit</button>
                 </div>
             </form> 
         </div>       
@@ -220,7 +229,7 @@
                 <div class="question-container">
                     <div class="question-content">
                         <div>
-                            <input type="text" class="input" name="question1" placeholder="Question" required>
+                            <input type="text" class="input" name="question" placeholder="Question" required>
                             <select onchange="handleSelectChange(this)">
                                 <option value="" selected disabled hidden>Select a type</option>
                                 <option value="text">Short Question</option>
@@ -249,7 +258,7 @@
                 <div class="question-container">
                     <div class="question-content">
                         <div>
-                            <input type="text" class="input" name="question1" placeholder="Question" required>
+                            <input type="text" class="input" name="question" placeholder="Question" required>
                             <select onchange="handleSelectChange(this)">
                                 <option value="" selected disabled hidden>Select a type</option>
                                 <option value="text">Short Question</option>
@@ -292,6 +301,7 @@
                     newInput.type = 'text';
                     newInput.className = 'input option-input';
                     newInput.placeholder = 'Option ' + (i + 1);
+                    newInput.name = 'option';
                     optionList.appendChild(newInput);
                 }
             } else if (selectElement.value === 'likert') {
@@ -300,6 +310,7 @@
                     newInput.type = 'text';
                     newInput.className = 'input option-input';
                     newInput.placeholder = i === 0 ? 'Minimum label' : 'Maximum label';
+                    newInput.name = 'option';
                     optionList.appendChild(newInput);
                 }
             } else if (selectElement.value === 'text') {
@@ -312,11 +323,44 @@
             }
         }
 
-        $('#dynamic-form').on('submit', function(e) {
-            e.preventDefault();
-            let formData = $(this).serializeArray();
-            console.log(formData);  // Replace this with your AJAX call to upload data to the server
+        document.querySelector('form').addEventListener('submit', function(event) {
+            // Prevent the form from being submitted normally
+            event.preventDefault();
+        
+            // Collect the data
+            var scale = document.getElementsByName("title")[0].value;
+            var questionElements = document.getElementsByName("question");
+            var questions = Array.from(questionElements).map(element => element.value);
+            var optionElements = document.getElementsByName("option");
+            var options = Array.from(optionElements).map(element => element.value);
+        
+            // Create the data object
+            var data = {
+                scale: scale,
+                questions: questions,
+                options: options
+            };
+        
+            // Send the AJAX request
+            $.ajax({
+                url: '/submit',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(data),
+                success: function(response) {
+                    // Handle the response
+                    console.log(response);
+                },
+                error: function(error) {
+                    // Handle the error
+                    console.log(error);
+                }
+            });
         });
+
+        
+
+        
     </script>
 </body>
 </html>
