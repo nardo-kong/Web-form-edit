@@ -50,7 +50,6 @@ public class SubmitController {
                     System.out.println("Option saved");
                 }
             }
-            System.out.println("Question saved");
             
         }
     }

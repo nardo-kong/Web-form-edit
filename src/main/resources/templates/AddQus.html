@@ -330,15 +330,21 @@
             // Collect the data
             var scale = document.getElementsByName("title")[0].value;
             var questionElements = document.getElementsByName("question");
-            var questions = Array.from(questionElements).map(element => element.value);
-            var optionElements = document.getElementsByName("option");
-            var options = Array.from(optionElements).map(element => element.value);
+            var questions = Array.from(questionElements).map(element => {
+                var questionText = element.querySelector('input[name="question"]').value;
+                var optionElements = element.querySelectorAll('input[name="options"]');
+                var options = Array.from(optionElements).map(option => option.value);
+        
+                return {
+                    question: questionText,
+                    options: options
+                };
+            });
         
             // Create the data object
             var data = {
                 scale: scale,
-                questions: questions,
-                options: options
+                questions: questions
             };
         
             // Send the AJAX request
