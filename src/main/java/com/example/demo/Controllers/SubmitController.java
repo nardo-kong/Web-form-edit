@@ -37,19 +37,26 @@ public class SubmitController {
         List<Question> questions = questionnaire.getQuestions();
         for (Question question : questions) {
             question.setScale(scale.getTitle());
-            question = questionRepository.save(question);
+
+
+            List<Option> options = question.getOptions();
+
+
+            question.setOptions(null);
+            questionRepository.save(question);
+            
 
             // Save the options
-            List<Option> options = question.getOptions();
-            if (options == null) {
-                continue;
-            } else {
+            
+            if (options != null) {
                 for (Option option : options) {
                     option.setQuestion(question);
                     optionRepository.save(option);
-                    System.out.println("Option saved");
                 }
             }
+
+            question.setOptions(options);
+            question = questionRepository.save(question);
             
         }
     }

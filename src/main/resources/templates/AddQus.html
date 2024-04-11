@@ -185,7 +185,7 @@
                 </div>
                 <div id="question-list" class="question-list">
                     <div class="question-container">
-                        <div class="question-content">
+                        <div class="question-content" name="question-content">
                             <div>
                                 <input type="text" class="input" name="question" placeholder="Question" required>
                                 <select onchange="handleSelectChange(this)">
@@ -227,7 +227,7 @@
             let questionContainer = button.parentElement.parentElement;
             let newInput = `
                 <div class="question-container">
-                    <div class="question-content">
+                    <div class="question-content" name="question-content">
                         <div>
                             <input type="text" class="input" name="question" placeholder="Question" required>
                             <select onchange="handleSelectChange(this)">
@@ -256,7 +256,7 @@
         function addInputBottom() {
             let newInput = `
                 <div class="question-container">
-                    <div class="question-content">
+                    <div class="question-content" name="question-content">
                         <div>
                             <input type="text" class="input" name="question" placeholder="Question" required>
                             <select onchange="handleSelectChange(this)">
@@ -333,11 +333,11 @@
 
             var questions = Array.from(questionElements).map(element => {
                 var questionText = element.querySelector('input[name="question"]').value;
-                var optionElements = element.querySelectorAll('input[name="options"]');
+                var optionElements = element.querySelectorAll('input[name="option"]');
                 var options = Array.from(optionElements).map(option => option.value);
         
                 return {
-                    question: questionText,
+                    text: questionText,
                     options: options
                 };
             });

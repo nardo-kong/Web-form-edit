@@ -5,7 +5,6 @@ import java.util.List;
 public class Questionnaire {
     private Scale scale;
     private List<Question> questions;
-    private List<Option> options;
 
     // Getters and setters...
     public Scale getScale() {
@@ -15,7 +14,4 @@ public class Questionnaire {
         return questions;
     }
 
-    public List<Option> getOptions() {
-        return options;
-    }
 }

@@ -66,4 +66,8 @@ public class Question {
         this.scale = scale;
     }
 
+    public void setOptions(List<Option> options) {
+        this.options = options;
+    }
+
 }
