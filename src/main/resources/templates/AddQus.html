@@ -329,7 +329,8 @@
         
             // Collect the data
             var scale = document.getElementsByName("title")[0].value;
-            var questionElements = document.getElementsByName("question");
+            var questionElements = document.getElementsByName("question-content");
+
             var questions = Array.from(questionElements).map(element => {
                 var questionText = element.querySelector('input[name="question"]').value;
                 var optionElements = element.querySelectorAll('input[name="options"]');
