@@ -192,7 +192,7 @@
                                     <option value="" selected disabled hidden>Select a type</option>
                                     <option value="text">Short Question</option>
                                     <option value="select">Multiple Choice</option>
-                                    <option value="likert">Linear Scale</option>
+                                    <option value="likert5">Linear Scale</option>
                                 </select>
                             </div>
                             
@@ -234,7 +234,7 @@
                                 <option value="" selected disabled hidden>Select a type</option>
                                 <option value="text">Short Question</option>
                                 <option value="select">Multiple Choice</option>
-                                <option value="likert">Linear Scale</option>
+                                <option value="likert5">Linear Scale</option>
                             </select>
                         </div>
                         
@@ -263,7 +263,7 @@
                                 <option value="" selected disabled hidden>Select a type</option>
                                 <option value="text">Short Question</option>
                                 <option value="select">Multiple Choice</option>
-                                <option value="likert">Linear Scale</option>
+                                <option value="likert5">Linear Scale</option>
                             </select>
                         </div>
                         
@@ -304,7 +304,7 @@
                     newInput.name = 'option';
                     optionList.appendChild(newInput);
                 }
-            } else if (selectElement.value === 'likert') {
+            } else if (selectElement.value === 'likert5') {
                 for (let i = 0; i < 2; i++) {
                     let newInput = document.createElement('input');
                     newInput.type = 'text';
