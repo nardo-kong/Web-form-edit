@@ -188,7 +188,7 @@
                         <div class="question-content" name="question-content">
                             <div>
                                 <input type="text" class="input" name="question" placeholder="Question" required>
-                                <select onchange="handleSelectChange(this)">
+                                <select name="type" onchange="handleSelectChange(this)">
                                     <option value="" selected disabled hidden>Select a type</option>
                                     <option value="text">Short Question</option>
                                     <option value="select">Multiple Choice</option>
@@ -230,7 +230,7 @@
                     <div class="question-content" name="question-content">
                         <div>
                             <input type="text" class="input" name="question" placeholder="Question" required>
-                            <select onchange="handleSelectChange(this)">
+                            <select name="type" onchange="handleSelectChange(this)">
                                 <option value="" selected disabled hidden>Select a type</option>
                                 <option value="text">Short Question</option>
                                 <option value="select">Multiple Choice</option>
@@ -259,7 +259,7 @@
                     <div class="question-content" name="question-content">
                         <div>
                             <input type="text" class="input" name="question" placeholder="Question" required>
-                            <select onchange="handleSelectChange(this)">
+                            <select name="type" onchange="handleSelectChange(this)">
                                 <option value="" selected disabled hidden>Select a type</option>
                                 <option value="text">Short Question</option>
                                 <option value="select">Multiple Choice</option>
@@ -333,11 +333,13 @@
 
             var questions = Array.from(questionElements).map(element => {
                 var questionText = element.querySelector('input[name="question"]').value;
+                var questionType = element.querySelector('select[name="type"]').value;
                 var optionElements = element.querySelectorAll('input[name="option"]');
                 var options = Array.from(optionElements).map(option => option.value);
         
                 return {
                     text: questionText,
+                    type: questionType,
                     options: options
                 };
             });
