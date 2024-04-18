@@ -37,18 +37,15 @@ public class SubmitController {
         List<Question> questions = questionnaire.getQuestions();
         for (Question question : questions) {
             question.setScale(scale.getTitle());
-            
 
-
+            // Extract the options from the question
             List<Option> options = question.getOptions();
 
-
+            // Remove the options to avoid a constraint violation
             question.setOptions(null);
             questionRepository.save(question);
-            
 
             // Save the options
-            
             if (options != null) {
                 for (Option option : options) {
                     option.setQuestion(question);
@@ -56,6 +53,7 @@ public class SubmitController {
                 }
             }
 
+            // Save the question with the options
             question.setOptions(options);
             question = questionRepository.save(question);
             

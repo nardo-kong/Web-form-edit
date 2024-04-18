@@ -21,6 +21,8 @@ public class Question {
 
     private String scale;
 
+    private int page;
+
     @OneToMany
     @JoinColumn(name = "question_id")
     private List<Option> options;
@@ -68,6 +70,14 @@ public class Question {
 
     public void setOptions(List<Option> options) {
         this.options = options;
+    }
+
+    public int getPage() {
+        return page;
+    }
+
+    public void setPage(int page) {
+        this.page = page;
     }
 
 }
