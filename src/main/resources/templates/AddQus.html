@@ -52,6 +52,12 @@
             box-sizing: border-box;
         }
 
+        .input.page {
+            width: 20%;
+            box-sizing: border-box;
+            padding: 14px 2px;
+        }
+
 
         select{
             padding: 14px 14px;
@@ -199,6 +205,10 @@
                             <div id="option-list" class="option-list">
                                 <!-- Options will be added here -->
                             </div>
+
+                            <div style="display: flex; width: 100%;">
+                                <input type="text" class="input page" name="page" placeholder="Page(1)" required>
+                            </div>
                         </div>
 
                         <div class="right-button-container">
@@ -241,6 +251,10 @@
                         <div id="option-list" class="option-list">
                             <!-- Options will be added here -->
                         </div>
+
+                        <div style="display: flex; width: 100%;">
+                            <input type="text" class="input page" name="page" placeholder="Page(1)" required>
+                        </div>
                     </div>
             
                     <div class="right-button-container">
@@ -269,6 +283,10 @@
                         
                         <div id="option-list" class="option-list">
                             <!-- Options will be added here -->
+                        </div>
+
+                        <div style="display: flex; width: 100%;">
+                            <input type="text" class="input page" name="page" placeholder="Page(1)" required>
                         </div>
                     </div>
             
@@ -336,11 +354,13 @@
                 var questionType = element.querySelector('select[name="type"]').value;
                 var optionElements = element.querySelectorAll('input[name="option"]');
                 var options = Array.from(optionElements).map(option => option.value);
+                var questionPage = element.querySelector('input[name="page"]').value;
         
                 return {
                     text: questionText,
                     type: questionType,
-                    options: options
+                    options: options,
+                    page: questionPage
                 };
             });
         

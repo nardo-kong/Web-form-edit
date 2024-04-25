@@ -31,6 +31,7 @@ public class SubmitController {
         // Save the scale
         Scale scale = new Scale();
         scale.setTitle(questionnaire.getScale().getTitle().toString());
+        scale.setTotalPage(0);
         scaleRepository.save(scale);
 
         // Save the questions

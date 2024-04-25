@@ -1,7 +1,9 @@
 package com.example.demo.Controllers;
 import com.example.demo.Entities.Administrator;
+import com.example.demo.Entities.Scale;
 import com.example.demo.Repositories.AdministratorRepository;
-
+import com.example.demo.Repositories.AnswerRecordRepository;
+import com.example.demo.Repositories.ScaleRepository;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,6 +15,11 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import java.security.MessageDigest;
 import java.nio.charset.StandardCharsets;
 import java.security.NoSuchAlgorithmException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import org.springframework.web.bind.annotation.RequestBody;
+
 
 
 
@@ -23,6 +30,10 @@ public class HomeController {
 
     @Autowired
     private AdministratorRepository adminRepo;
+    @Autowired
+    private ScaleRepository scaleRepository;
+    @Autowired
+    private AnswerRecordRepository answerRecordRepository;
 
     @GetMapping("/")
     public String home() {
@@ -38,10 +49,32 @@ public class HomeController {
             model.addAttribute("error", "Invalid username or password");
             return "Home";
         } else {
-            //return "redirect:/admin";
-            return "AddQus";
+            return "redirect:/Dashboard";
         }
     }
+
+    @GetMapping("/Dashboard")
+    public String dashboard(Model model) {
+        List<Scale> scales = scaleRepository.findAll();
+        Map<String, Integer> completedCounts = new HashMap<>();
+    
+        for (Scale scale : scales) {
+            int count = answerRecordRepository.countByScaleIdAndCompleted(scale.getId(), true);
+            completedCounts.put(scale.getTitle(), count);
+        }
+    
+        model.addAttribute("scales", scales);
+        model.addAttribute("completedCounts", completedCounts);
+    
+        return "dashboard";
+    }
+
+    @PostMapping("/createQus")
+    public String createQus() {
+        
+        return "AddQus";
+    }
+    
 
     
     public String hashPassword(String password) {

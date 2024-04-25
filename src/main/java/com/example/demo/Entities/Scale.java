@@ -2,10 +2,6 @@ package com.example.demo.Entities;
 
 import javax.persistence.*;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonProperty;
-
-import java.util.List;
 
 @Entity(name = "scales")
 public class Scale {
@@ -14,6 +10,8 @@ public class Scale {
     private Long id;
 
     private String title;
+
+    private int totalPage;
 
     public Scale() {
     }
@@ -33,6 +31,14 @@ public class Scale {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public int getTotalPage() {
+        return totalPage;
+    }
+
+    public void setTotalPage(int totalPage) {
+        this.totalPage = totalPage;
     }
     
 }
