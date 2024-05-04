@@ -8,6 +8,6 @@ https://nardo-kong.github.io/Web-form-edit/Login
 ## Dashboard
 https://nardo-kong.github.io/Web-form-edit/Dashboard
 ## Form create
-https://nardo-kong.github.io/Web-form-edit/Form Edit
+https://nardo-kong.github.io/Web-form-edit/Form+Edit
 ## View records
-https://nardo-kong.github.io/Web-form-edit/View Records
+https://nardo-kong.github.io/Web-form-edit/View+Records
