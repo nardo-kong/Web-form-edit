@@ -1,12 +1,12 @@
 package com.example.demo.Controllers;
-import com.example.demo.Entities.Administrator;
-import com.example.demo.Entities.Scale;
-import com.example.demo.Repositories.AdministratorRepository;
-import com.example.demo.Repositories.AnswerRecordRepository;
-import com.example.demo.Repositories.ScaleRepository;
+import com.example.demo.Entities.*;
+import com.example.demo.Repositories.*;
+import com.example.demo.Services.*;
+
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,9 +16,9 @@ import java.security.MessageDigest;
 import java.nio.charset.StandardCharsets;
 import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import org.springframework.web.bind.annotation.RequestBody;
 
 
 
@@ -34,6 +34,12 @@ public class HomeController {
     private ScaleRepository scaleRepository;
     @Autowired
     private AnswerRecordRepository answerRecordRepository;
+    @Autowired
+    private AnswerRecordService answerRecordService;
+    @Autowired
+    private AnswerService answerService;
+    @Autowired
+    private QuestionService questionService;
 
     @GetMapping("/")
     public String home() {
@@ -73,6 +79,29 @@ public class HomeController {
     public String createQus() {
         
         return "AddQus";
+    }
+    
+    @GetMapping("/view/{id}")
+    public String viewRecords(@PathVariable Long id, Model model) {
+        // 1. 根据scale-id查询answer-record
+        List<AnswerRecord> answerRecords = answerRecordService.getAnswerRecordsByScaleId(id);
+    
+        // 2. 对于每个answer-record，根据answer-record-id查询answer
+        Map<AnswerRecord, List<Answer>> recordAnswerMap = new LinkedHashMap<>();
+        for (AnswerRecord answerRecord : answerRecords) {
+            List<Answer> answers = answerService.getAnswersByRecordId(answerRecord.getId());
+            recordAnswerMap.put(answerRecord, answers);
+        }
+
+        // 3. 查询问题题目
+        List<Question> questions = questionService.getQuestionsByScaleTitleRemoveIllustration(id);
+    
+        // 4. 将查询结果添加到model中
+        model.addAttribute("recordAnswerMap", recordAnswerMap);
+        model.addAttribute("questions", questions);
+    
+        // 5. 返回视图的名称
+        return "ViewRecords";
     }
     
 
