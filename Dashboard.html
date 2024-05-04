@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<!-- saved from url=(0031)http://localhost:8080/Dashboard -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>Dashboard</title>
+    <!-- Add your CSS and JavaScript files here -->
+    <style>
+        .main-warpper {
+            width: 60%;
+            margin: auto;
+        }
+
+        .container {
+            padding: 20px;
+        }
+        .card {
+            background-color: #e9ecef;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+            margin-bottom: 20px;
+            padding: 20px;
+        }
+        .card-body {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .card-title {
+            font-size: 1.5em;
+            margin-bottom: 10px;
+        }
+        .card-text {
+            margin-bottom: 20px;
+        }
+
+        /* My css */
+        .btn {
+            text-align: center;
+            max-width: 50%;
+            font-size: 16px;
+            text-decoration: none;
+            border-radius: 5px;
+            padding: 14px 25px;
+            border: none;
+            font-weight: 500;
+            background-color: #6a64f1;
+            color: white;
+            cursor: pointer;
+            margin-top: 15px;
+        }
+        .btn:hover {
+            background-color: #5c56e8;
+            box-shadow: 0px 3px 8px rgba(0, 0, 0, 0.05);
+        }
+        .btn-blue {
+            background-color: #007bff;
+        }
+        .btn-blue:hover {
+            background-color: #0056b3;
+        }
+        .btn-long {
+            width: 40%;
+        }
+        .btn-green {
+            background-color: #28a745;
+        }
+        .btn-green:hover {
+            background-color: #218838;
+        }
+
+        .text-right {
+            text-align: right;
+            margin-right: 5%;
+        }
+        .card-body .text-right {
+            display: flex;
+            gap: 10px;
+            
+        }
+
+    </style>
+<style type="text/css">.__copy-currency-container{background-color:#4c98f7;border-radius:3px;bottom:0;display:flex;flex-direction:column;left:-150px;position:fixed;transition:all .3s;width:150px;z-index:9999999999}.__copy-currency-container:before{background-color:#4c98f7;border-radius:20px;content:"";cursor:pointer;height:20px;position:absolute;right:-6px;top:calc(50% - 10px);width:20px}.__copy-currency-container:hover{left:0}.__copy-currency-container>.__copy-currency-button{border:1px solid #fff;border-radius:3px;color:#fff!important;cursor:pointer;font-size:12px!important;margin:5px;padding:5px 3px 5px 4px;text-align:center;user-select:none;z-index:9999999999}</style></head>
+<body style="background-color: #f8f9fa;">
+    <div class="main-warpper">
+        <!-- Header -->
+        <h1 style="padding-left: 20px; padding-right: 20px;">Welcome to the Dashboard</h1>
+
+        <!-- Add new questionnaire -->
+        <form action="http://localhost:8080/createQus" method="post" style="display: flex; align-items: center; justify-content: center;">
+            <!-- Add your input fields here -->
+            <input class="btn btn-long btn-green" type="submit" value="Create">
+        </form>
+
+        <!-- Qustionnair display -->
+        <div class="container">
+            
+                <div class="card" style="margin-bottom: 20px; background-color: #e9ecef;">
+                    <div class="card-body">
+                        <div>
+                            <h3 class="card-title">intertemporal choice</h3>
+                            <p class="card-text">Completed: 2</p>
+                        </div>
+                        <div class="text-right">
+                            <a class="btn" href="http://localhost:8080/edit/100001">Edit</a>
+                            <a class="btn btn-blue" href="http://localhost:8080/view/100001">View Records</a>
+                        </div>
+                    </div>
+                    
+                </div>
+            
+                <div class="card" style="margin-bottom: 20px; background-color: #e9ecef;">
+                    <div class="card-body">
+                        <div>
+                            <h3 class="card-title">test</h3>
+                            <p class="card-text">Completed: 14</p>
+                        </div>
+                        <div class="text-right">
+                            <a class="btn" href="http://localhost:8080/edit/100002">Edit</a>
+                            <a class="btn btn-blue" href="http://localhost:8080/view/100002">View Records</a>
+                        </div>
+                    </div>
+                    
+                </div>
+            
+                <div class="card" style="margin-bottom: 20px; background-color: #e9ecef;">
+                    <div class="card-body">
+                        <div>
+                            <h3 class="card-title">Testing 0416</h3>
+                            <p class="card-text">Completed: 0</p>
+                        </div>
+                        <div class="text-right">
+                            <a class="btn" href="http://localhost:8080/edit/100026">Edit</a>
+                            <a class="btn btn-blue" href="http://localhost:8080/view/100026">View Records</a>
+                        </div>
+                    </div>
+                    
+                </div>
+            
+                <div class="card" style="margin-bottom: 20px; background-color: #e9ecef;">
+                    <div class="card-body">
+                        <div>
+                            <h3 class="card-title">hahaha</h3>
+                            <p class="card-text">Completed: 0</p>
+                        </div>
+                        <div class="text-right">
+                            <a class="btn" href="http://localhost:8080/edit/100027">Edit</a>
+                            <a class="btn btn-blue" href="http://localhost:8080/view/100027">View Records</a>
+                        </div>
+                    </div>
+                    
+                </div>
+            
+        </div>
+
+        
+
+    
+
+</div><div class="__copy-currency-container"><div class="__copy-currency-button">✅ 启动解除复制限制</div><div class="__copy-currency-button">✅ 启动解除右键限制</div><div class="__copy-currency-button">✅ 启动解除键盘限制</div></div></body></html>
