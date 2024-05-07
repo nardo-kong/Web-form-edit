@@ -15,6 +15,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import java.security.MessageDigest;
 import java.nio.charset.StandardCharsets;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -102,6 +103,51 @@ public class HomeController {
     
         // 5. 返回视图的名称
         return "ViewRecords";
+    }
+
+    @GetMapping("/edit/{id}")
+    public String editQus(@PathVariable Long id, Model model) {
+        
+        // 1. 根据scale-id查询title
+        Scale scale = scaleRepository.findById(id).get();
+        String scaleTitle = scale.getTitle();
+
+        // 2. 根据scale-id查询questions
+        List<Question> questions = questionService.getQuestionsByScaleTitle(id);
+        List<Option> originalOptions = questionService.getOptionsByScaleTitle(id);
+
+        List<Map<String, Object>> optionsList = new ArrayList<>();
+        for (Option option : originalOptions) {
+            int questionId = option.getQuestion().getId();
+            String optionText = option.getText();
+        
+            boolean found = false;
+            for (Map<String, Object> map : optionsList) {
+                if (map.get("questionId").equals(questionId)) {
+                    ((List<String>)map.get("value")).add(optionText);
+                    found = true;
+                    break;
+                }
+            }
+        
+            if (!found) {
+                List<String> optionList = new ArrayList<>();
+                optionList.add(optionText);
+                Map<String, Object> newMap = new HashMap<>();
+                newMap.put("questionId", questionId);
+                newMap.put("value", optionList);
+                optionsList.add(newMap);
+            }
+        }
+        System.out.println(optionsList);
+
+        // 3. 将查询结果添加到model中
+        model.addAttribute("scaleTitle", scaleTitle);
+        model.addAttribute("questions", questions);
+        model.addAttribute("options", optionsList);
+
+        // 4. 返回视图的名称
+        return "EditQus";
     }
     
 

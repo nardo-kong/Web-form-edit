@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Form Edit</title>
+    <script src="/js/jquery-3.5.1.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <style>
+
+        /* Style for main container */
+        .main-warpper {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 48px;
+        }
+        .form-wrapper {
+            width: 80%;
+        }
+
+        /* Style for input fields */
+        .input{
+            text-align: center;
+            padding: 14px 60px;
+            
+            border-radius: 6px;
+            border: 1px solid #DDE3EC;
+            font-weight: 500;
+            font-size: 16px;
+            color: #536387;
+            outline: none;
+            resize: none;
+        }
+        .input:focus {
+            border-color: #6a64f1;
+            box-shadow: 0px 3px 8px rgba(0, 0, 0, 0.05);
+        }
+        .input.option-input {
+            border: none;
+            border-bottom: 2px solid #ccc;
+            border-radius: 0;
+            padding: 4px 20px;
+            text-align: left;
+            width: 80%;
+        }
+        .input.option-input:focus {
+            border-color: #6a64f1;
+            box-shadow: none;
+        }
+
+        .input.title {
+            width: 68%;
+            box-sizing: border-box;
+        }
+
+        .input.page {
+            width: 20%;
+            box-sizing: border-box;
+            padding: 14px 2px;
+        }
+
+
+        select{
+            padding: 14px 14px;
+
+            border-radius: 6px;
+            border: 1px solid #DDE3EC;
+            background: #ffffff;
+            font-weight: 500;
+            font-size: 16px;
+            text-align: center;
+            color: #536387;
+            outline: none;
+            cursor: pointer;
+        }
+
+        /* Style for trash and plus icon */
+        .delete-button, .add-button{
+            border: none;
+            background: none;
+            font-size: 20px;
+        }
+        .delete-button .fas.fa-trash {
+            color: rgb(215, 68, 68);
+            transition: color 0.2s, transform 0.2s;
+            cursor: pointer;
+        }
+        .delete-button .fas.fa-trash:hover {
+            color: rgb(173, 36, 36);
+            transform: scale(1.2);
+        }
+        .add-button .fas.fa-plus {
+            color: rgb(68, 215, 68);
+            transition: color 0.2s, transform 0.2s;
+            cursor: pointer;
+        }
+        .add-button .fas.fa-plus:hover {
+            color: rgb(36, 173, 36);
+            transform: scale(1.2);
+        }
+
+        /* Style for buttons */
+        .btn {
+            text-align: center;
+            width: 15%;
+            font-size: 16px;
+            border-radius: 5px;
+            padding: 14px 25px;
+            border: none;
+            font-weight: 500;
+            background-color: #6a64f1;
+            color: white;
+            cursor: pointer;
+            margin-top: 15px;
+        }
+        .btn:hover {
+            background-color: #5c56e8;
+            box-shadow: 0px 3px 8px rgba(0, 0, 0, 0.05);
+        }
+        .button-container {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+        }
+
+        .right-button-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            background-color: #ffffff;
+            padding: 20px 10px;
+        }
+
+        /* Style for question */
+        .question-list {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        .question-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin: 10px 0;
+        }
+        
+        .question-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            background-color: #ffffff;
+            padding: 30px;
+        }
+        .question-content:focus-within {
+            border-left: 5px solid blue;
+        }
+
+            /* Style for options */
+        .option-list {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: start;
+            gap: 10px;
+        }
+
+
+        body {
+            background-color: #f6f1f7;
+        }
+
+        
+            
+        
+    </style>
+</head>
+<body>
+    <div class="main-warpper">
+        <div class="form-wrapper">
+            <form>
+                <div style="display: flex; justify-content: center;">
+                    <input type="text" class="input title" name="title" placeholder="Title" th:value="${scaleTitle}" required>
+                </div>
+                <div id="question-list" class="question-list">
+                    <div class="question-container" th:each="question : ${questions}">
+                        <div class="question-content" name="question-content">
+                            <div>
+                                <input type="text" class="input" name="question" th:value="${question.text}" placeholder="Question" required>
+                                <select name="type" onchange="handleSelectChange(this)" th:attr="data-question-id=${question.id}">
+                                    <option value="" selected disabled hidden>Select a type</option>
+                                    <option value="text" th:selected="${question.type == 'text'}">Short Question</option>
+                                    <option value="select" th:selected="${question.type == 'select'}">Multiple Choice</option>
+                                    <option value="likert5" th:selected="${question.type == 'likert5'}">Linear Scale</option>
+                                </select>
+                            </div>
+                            
+                            <div id="option-list" class="option-list" th:attr="data-question-id=${question.id}">
+                                <!-- Options will be added here -->
+                            </div>
+
+                            <div style="display: flex; width: 100%;">
+                                <input type="text" class="input page" name="page" th:value="${question.page}" placeholder="Page(1)" required>
+                            </div>
+                        </div>
+
+                        <div class="right-button-container">
+                            <button type="button" class="delete-button" onclick="removeInput(this)"><i class="fas fa-trash"></i></button>
+                            <button type="button" class="add-button" onclick="addInput(this)"><i class="fas fa-plus"></i></button>
+                        </div>
+                        
+                    </div>  
+                </div>
+                
+                <div class="button-container">
+                    <button type="button" class="btn" onclick="addInputBottom()">Add</button>
+                    <button type="submit" class="btn" value="Submit">Submit</button>
+                </div>
+            </form> 
+        </div>       
+    </div>
+    
+    <script th:inline="javascript">
+        var options = /*[[${options}]]*/ [];
+    </script>
+
+    <script>
+        var optionsMap = {};
+        // 初始化代码
+        window.onload = function() {
+            // 其他的初始化代码...
+            for (var i = 0; i < options.length; i++) {
+                var option = options[i];
+                optionsMap[option.questionId] = option;
+            }
+            console.log('optionsMap:', optionsMap);
+        
+            // 先进行select元素的遍历
+            var selectElements = document.querySelectorAll('select[name="type"]');
+            selectElements.forEach(function(selectElement) {
+                // 手动触发change事件
+                handleSelectInit(selectElement);
+            });
+            
+            
+        };
+
+        // Function to handle question add and remove
+        let questionCounter = 2;
+
+        // Add and remove buttons in right side
+        function addInput(button) {
+            let questionContainer = button.parentElement.parentElement;
+            let newInput = `
+                <div class="question-container">
+                    <div class="question-content" name="question-content">
+                        <div>
+                            <input type="text" class="input" name="question" placeholder="Question" required>
+                            <select name="type" onchange="handleSelectChange(this)">
+                                <option value="" selected disabled hidden>Select a type</option>
+                                <option value="text">Short Question</option>
+                                <option value="select">Multiple Choice</option>
+                                <option value="likert5">Linear Scale</option>
+                            </select>
+                        </div>
+                        
+                        <div id="option-list" class="option-list">
+                            <!-- Options will be added here -->
+                        </div>
+
+                        <div style="display: flex; width: 100%;">
+                            <input type="text" class="input page" name="page" placeholder="Page(1)" required>
+                        </div>
+                    </div>
+            
+                    <div class="right-button-container">
+                        <button type="button" class="delete-button" onclick="removeInput(this)"><i class="fas fa-trash"></i></button>
+                        <button type="button" class="add-button" onclick="addInput(this)"><i class="fas fa-plus"></i></button>
+                    </div>
+                </div>  
+            `;
+            questionContainer.insertAdjacentHTML('afterend', newInput);
+            questionCounter++;
+        }
+
+        // Add and remove buttons at the bottom
+        function addInputBottom() {
+            let newInput = `
+                <div class="question-container">
+                    <div class="question-content" name="question-content">
+                        <div>
+                            <input type="text" class="input" name="question" placeholder="Question" required>
+                            <select name="type" onchange="handleSelectChange(this)">
+                                <option value="" selected disabled hidden>Select a type</option>
+                                <option value="text">Short Question</option>
+                                <option value="select">Multiple Choice</option>
+                                <option value="likert5">Linear Scale</option>
+                            </select>
+                        </div>
+                        
+                        <div id="option-list" class="option-list">
+                            <!-- Options will be added here -->
+                        </div>
+
+                        <div style="display: flex; width: 100%;">
+                            <input type="text" class="input page" name="page" placeholder="Page(1)" required>
+                        </div>
+                    </div>
+            
+                    <div class="right-button-container">
+                        <button type="button" class="delete-button" onclick="removeInput(this)"><i class="fas fa-trash"></i></button>
+                        <button type="button" class="add-button" onclick="addInput(this)"><i class="fas fa-plus"></i></button>
+                    </div>
+                </div>  
+            `;
+            $('#question-list').append(newInput);
+            questionCounter++;
+        }
+
+        function removeInput(element) {
+            $(element).parent().parent().remove();
+        }
+
+
+        // Function to handle select change
+        function handleSelectChange(selectElement) {
+            let questionContent = selectElement.parentElement.parentElement;
+            let optionList = questionContent.querySelector('#option-list');
+            while(optionList.firstChild) {
+                optionList.removeChild(optionList.firstChild);
+            }
+
+            if (selectElement.value === 'select') {
+                for (let i = 0; i < 4; i++) {  // Change this number to the number of options you want
+                    let newInput = document.createElement('input');
+                    newInput.type = 'text';
+                    newInput.className = 'input option-input';
+                    newInput.placeholder = 'Option ' + (i + 1);
+                    newInput.name = 'option';
+                    optionList.appendChild(newInput);
+                }
+            } else if (selectElement.value === 'likert5') {
+                for (let i = 0; i < 2; i++) {
+                    let newInput = document.createElement('input');
+                    newInput.type = 'text';
+                    newInput.className = 'input option-input';
+                    newInput.placeholder = i === 0 ? 'Minimum label' : 'Maximum label';
+                    newInput.name = 'option';
+                    optionList.appendChild(newInput);
+                }
+            } else if (selectElement.value === 'text') {
+                let newInput = document.createElement('input');
+                newInput.type = 'text';
+                newInput.className = 'input option-input';
+                newInput.placeholder = 'Answer';
+                newInput.readOnly = true;  // Make the input read-only
+                optionList.appendChild(newInput);
+            }
+        }
+
+        // Function to handle select initialization
+        function handleSelectInit(selectElement) {
+        
+            let questionContent = selectElement.parentElement.parentElement;
+            let optionList = questionContent.querySelector('#option-list');
+            var questionId = selectElement.dataset.questionId;
+            // console.log('questionId:', questionId); // 打印questionId的值
+            
+            var options = optionsMap[questionId];
+            // console.log('optionsvalue:', options.value.length); // 打印options的值
+            
+            while(optionList.firstChild) {
+                optionList.removeChild(optionList.firstChild);
+            }
+        
+            if (selectElement.value === 'select') {
+                for (let i = 0; i < options.value.length; i++) {
+                    let newInput = document.createElement('input');
+                    newInput.type = 'text';
+                    newInput.className = 'input option-input';
+                    newInput.placeholder = 'Option ' + (i + 1);
+                    newInput.name = 'option';
+                    newInput.value = options.value[i];
+                    optionList.appendChild(newInput);
+                }
+            } else if (selectElement.value === 'likert5') {
+                for (let i = 0; i < options.value.length; i++) {
+                    let newInput = document.createElement('input');
+                    newInput.type = 'text';
+                    newInput.className = 'input option-input';
+                    newInput.placeholder = i === 0 ? 'Minimum label' : 'Maximum label';
+                    newInput.name = 'option';
+                    newInput.value = options.value[i];
+                    optionList.appendChild(newInput);
+                }
+            } else if (selectElement.value === 'text') {
+                let newInput = document.createElement('input');
+                newInput.type = 'text';
+                newInput.className = 'input option-input';
+                newInput.placeholder = 'Answer';
+                newInput.readOnly = true;
+                optionList.appendChild(newInput);
+            }
+        }
+
+
+
+        document.querySelector('form').addEventListener('submit', function(event) {
+            // Prevent the form from being submitted normally
+            event.preventDefault();
+        
+            // Collect the data
+            var scale = document.getElementsByName("title")[0].value;
+            var questionElements = document.getElementsByName("question-content");
+
+            var questions = Array.from(questionElements).map(element => {
+                var questionText = element.querySelector('input[name="question"]').value;
+                var questionType = element.querySelector('select[name="type"]').value;
+                var optionElements = element.querySelectorAll('input[name="option"]');
+                var options = Array.from(optionElements).map(option => option.value);
+                var questionPage = element.querySelector('input[name="page"]').value;
+        
+                return {
+                    text: questionText,
+                    type: questionType,
+                    options: options,
+                    page: questionPage
+                };
+            });
+        
+            // Create the data object
+            var data = {
+                scale: scale,
+                questions: questions
+            };
+        
+            // Send the AJAX request
+            $.ajax({
+                url: '/submit',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(data),
+                success: function(response) {
+                    // Handle the response
+                    console.log(response);
+                    window.location.href = "/" + response;
+                },
+                error: function(error) {
+                    // Handle the error
+                    console.log(error);
+                }
+            });
+        });
+
+        // Function for editing question
+        
+
+        
+
+        
+    </script>
+</body>
+</html>

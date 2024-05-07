@@ -9,6 +9,7 @@ import com.example.demo.Repositories.OptionRepository;
 
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -27,7 +28,7 @@ public class SubmitController {
     private OptionRepository optionRepository;
 
     @PostMapping("/submit")
-    public void submitQuestionnaire(@RequestBody Questionnaire questionnaire) {
+    public String submitQuestionnaire(@RequestBody Questionnaire questionnaire, Model model) {
         // Save the scale
         Scale scale = new Scale();
         scale.setTitle(questionnaire.getScale().getTitle().toString());
@@ -59,5 +60,7 @@ public class SubmitController {
             question = questionRepository.save(question);
             
         }
+
+        return "Dashboard";
     }
 }
