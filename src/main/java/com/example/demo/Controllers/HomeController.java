@@ -139,7 +139,7 @@ public class HomeController {
                 optionsList.add(newMap);
             }
         }
-        System.out.println(optionsList);
+        
 
         // 3. 将查询结果添加到model中
         model.addAttribute("scaleTitle", scaleTitle);
