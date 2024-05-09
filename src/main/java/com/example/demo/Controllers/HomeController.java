@@ -73,7 +73,7 @@ public class HomeController {
         model.addAttribute("scales", scales);
         model.addAttribute("completedCounts", completedCounts);
     
-        return "dashboard";
+        return "Dashboard";
     }
 
     @PostMapping("/createQus")
