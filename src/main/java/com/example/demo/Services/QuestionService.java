@@ -30,10 +30,10 @@ public class QuestionService {
         Scale scale = scaleRepository.findById(id).get();
     
         // 2. 从scale对象中获取title
-        String scaleTitle = scale.getTitle();
+        // String scaleTitle = scale.getTitle();
     
         // 3. 根据scale的title查询question
-        List<Question> questions = questionRepository.findByScale(scaleTitle);
+        List<Question> questions = questionRepository.findByScale(scale);
     
         // 4. 使用迭代器移除所有type为"illustration"的问题
         Iterator<Question> iterator = questions.iterator();
@@ -54,10 +54,10 @@ public class QuestionService {
         Scale scale = scaleRepository.findById(id).get();
     
         // 2. 从scale对象中获取title
-        String scaleTitle = scale.getTitle();
+        // String scaleTitle = scale.getTitle();
     
         // 3. 根据scale的title查询question
-        List<Question> questions = questionRepository.findByScale(scaleTitle);
+        List<Question> questions = questionRepository.findByScale(scale);
     
         // 4. 返回问题列表
         return questions;
@@ -68,10 +68,10 @@ public class QuestionService {
         Scale scale = scaleRepository.findById(id).get();
 
         // 2. 从scale对象中获取title
-        String scaleTitle = scale.getTitle();
+        // String scaleTitle = scale.getTitle();
 
         // 3. 根据scale的title查询question
-        List<Question> questions = questionRepository.findByScale(scaleTitle);
+        List<Question> questions = questionRepository.findByScale(scale);
 
         // 4. 根据问题列表查询选项列表
         List<Option> options = new ArrayList<>();

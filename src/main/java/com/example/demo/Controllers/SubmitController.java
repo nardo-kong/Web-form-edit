@@ -38,7 +38,7 @@ public class SubmitController {
         // Save the questions
         List<Question> questions = questionnaire.getQuestions();
         for (Question question : questions) {
-            question.setScale(scale.getTitle());
+            question.setScale(scale);
 
             // Extract the options from the question
             List<Option> options = question.getOptions();
