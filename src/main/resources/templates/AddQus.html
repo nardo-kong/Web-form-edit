@@ -188,6 +188,7 @@
             <form>
                 <div style="display: flex; justify-content: center;">
                     <input type="text" class="input title" name="title" placeholder="Title" required>
+                    <input type="hidden" name="AdminId" th:value="${AdminId}" />
                 </div>
                 <div id="question-list" class="question-list">
                     <div class="question-container">
@@ -347,6 +348,7 @@
         
             // Collect the data
             var scale = document.getElementsByName("title")[0].value;
+            var adminId = document.getElementsByName("AdminId")[0].value;
             var questionElements = document.getElementsByName("question-content");
 
             var questions = Array.from(questionElements).map(element => {
@@ -363,11 +365,33 @@
                     page: questionPage
                 };
             });
+
+            // Check if page numbers are consecutive
+            var pages = questions.map(question => Number(question.page));
+            pages.sort((a, b) => a - b);
+            
+            if (pages[0] !== 1) {
+                alert('Page numbers must start from 1.');
+                event.preventDefault();
+                return;
+            }
+            
+            for (var i = 0; i < pages.length - 1; i++) {
+                if (pages[i + 1] - pages[i] > 1) {
+                    alert('Page numbers must be consecutive and should not skip any page.');
+                    event.preventDefault();
+                    return;
+                }
+            }
         
             // Create the data object
             var data = {
-                scale: scale,
-                questions: questions
+                scale: {
+                    title: scale,
+                    totalPage: pages[pages.length - 1],
+                    adminId: adminId
+                },
+                questions: questions,
             };
         
             // Send the AJAX request
@@ -379,6 +403,7 @@
                 success: function(response) {
                     // Handle the response
                     console.log(response);
+                    window.location.href = "/" + response;
                 },
                 error: function(error) {
                     // Handle the error

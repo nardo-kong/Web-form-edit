@@ -56,13 +56,14 @@ public class HomeController {
             model.addAttribute("error", "Invalid username or password");
             return "Home";
         } else {
+            redirectAttributes.addAttribute("AdminId", admin.getId());
             return "redirect:/Dashboard";
         }
     }
 
     @GetMapping("/Dashboard")
-    public String dashboard(Model model) {
-        List<Scale> scales = scaleRepository.findAll();
+    public String dashboard(@RequestParam(required = true) int AdminId, Model model) {
+        List<Scale> scales = scaleRepository.findByAdminIdAndIsDeleted(AdminId, false);
         Map<String, Integer> completedCounts = new HashMap<>();
     
         for (Scale scale : scales) {
@@ -72,18 +73,19 @@ public class HomeController {
     
         model.addAttribute("scales", scales);
         model.addAttribute("completedCounts", completedCounts);
+        model.addAttribute("AdminId", AdminId);
     
         return "Dashboard";
     }
 
     @PostMapping("/createQus")
-    public String createQus() {
-        
+    public String createQus(@RequestParam(required = true) int AdminId, Model model) {
+        model.addAttribute("AdminId", AdminId);
         return "AddQus";
     }
     
     @GetMapping("/view/{id}")
-    public String viewRecords(@PathVariable Long id, Model model) {
+    public String viewRecords(@PathVariable Long id, Model model, @RequestParam(required = true) int AdminId) {
         // 1. 根据scale-id查询answer-record
         List<AnswerRecord> answerRecords = answerRecordService.getAnswerRecordsByScaleId(id);
     
@@ -100,13 +102,14 @@ public class HomeController {
         // 4. 将查询结果添加到model中
         model.addAttribute("recordAnswerMap", recordAnswerMap);
         model.addAttribute("questions", questions);
+        model.addAttribute("AdminId", AdminId);
     
         // 5. 返回视图的名称
         return "ViewRecords";
     }
 
     @GetMapping("/edit/{id}")
-    public String editQus(@PathVariable Long id, Model model) {
+    public String editQus(@PathVariable Long id, Model model, @RequestParam(required = true) int AdminId) {
         
         // 1. 根据scale-id查询title
         Scale scale = scaleRepository.findById(id).get();
@@ -145,6 +148,8 @@ public class HomeController {
         model.addAttribute("scaleTitle", scaleTitle);
         model.addAttribute("questions", questions);
         model.addAttribute("options", optionsList);
+        model.addAttribute("AdminId", AdminId);
+        model.addAttribute("previousId", id);
 
         // 4. 返回视图的名称
         return "EditQus";

@@ -4,6 +4,7 @@ import java.util.List;
 
 public class Questionnaire {
     private Scale scale;
+
     private List<Question> questions;
 
     // Getters and setters...

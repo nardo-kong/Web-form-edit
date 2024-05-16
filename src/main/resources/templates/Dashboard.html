@@ -87,6 +87,7 @@
         <!-- Add new questionnaire -->
         <form action="/createQus" method="post" style="display: flex; align-items: center; justify-content: center;">
             <!-- Add your input fields here -->
+            <input type="hidden" name="AdminId" th:value="${AdminId}" />
             <input class="btn btn-long btn-green" type="submit" value="Create">
         </form>
 
@@ -100,17 +101,14 @@
                             <p class="card-text" th:text="'Completed: ' + ${completedCounts[scale.title]}"></p>
                         </div>
                         <div class="text-right">
-                            <a class="btn" th:href="'/edit/' + ${scale.id}">Edit</a>
-                            <a class="btn btn-blue" th:href="'/view/' + ${scale.id}">View Records</a>
+                            <a class="btn" th:href="'/edit/' + ${scale.id} + '?AdminId=' + ${AdminId}">Edit</a>
+                            <a class="btn btn-blue" th:href="'/view/' + ${scale.id} + '?AdminId=' + ${AdminId}">View Records</a>
                         </div>
                     </div>
                     
                 </div>
             </th:block>
         </div>
-
-        
-
-    
+    </div>
 </body>
 </html>

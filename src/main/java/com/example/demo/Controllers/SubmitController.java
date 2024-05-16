@@ -7,7 +7,11 @@ import com.example.demo.Repositories.ScaleRepository;
 import com.example.demo.Repositories.QuestionRepository;
 import com.example.demo.Repositories.OptionRepository;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Optional;
+
+import org.hibernate.mapping.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -32,7 +36,11 @@ public class SubmitController {
         // Save the scale
         Scale scale = new Scale();
         scale.setTitle(questionnaire.getScale().getTitle().toString());
-        scale.setTotalPage(0);
+        scale.setTotalPage(questionnaire.getScale().getTotalPage());
+        scale.setDeleted(false);
+        scale.setCreatedDate(java.time.LocalDateTime.now());
+        scale.setAdminId(questionnaire.getScale().getAdminId());
+        scale.setPreviousId(questionnaire.getScale().getPreviousId());
         scaleRepository.save(scale);
 
         // Save the questions
@@ -61,6 +69,19 @@ public class SubmitController {
             
         }
 
-        return "Dashboard";
+        // Find the previous scale and set it as deleted
+        if (scale.getPreviousId() != null) {
+            Optional<Scale> previousScaleOptional = scaleRepository.findById(scale.getPreviousId());
+            if (previousScaleOptional.isPresent()) {
+                Scale previousScale = previousScaleOptional.get();
+                previousScale.setDeleted(true);
+                previousScale.setExpiryDate(java.time.LocalDateTime.now()); // Convert LocalDate to LocalDateTime
+                scaleRepository.save(previousScale);
+            }
+        }
+
+        String response = String.format("Dashboard?AdminId=%s", scale.getAdminId());
+
+        return response;
     }
 }

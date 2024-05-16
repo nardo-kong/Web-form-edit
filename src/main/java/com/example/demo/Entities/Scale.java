@@ -1,5 +1,8 @@
 package com.example.demo.Entities;
 
+import java.time.LocalDateTime;
+import java.util.List;
+
 import javax.persistence.*;
 
 
@@ -12,6 +15,19 @@ public class Scale {
     private String title;
 
     private int totalPage;
+
+    private boolean isDeleted;
+
+    private LocalDateTime createdDate;
+
+    private LocalDateTime expiryDate;
+
+    private int adminId;
+
+    private Long previousId;
+
+    @OneToMany(mappedBy = "scale")
+    private List<Question> questions;
 
     public Scale() {
     }
@@ -39,6 +55,46 @@ public class Scale {
 
     public void setTotalPage(int totalPage) {
         this.totalPage = totalPage;
+    }
+
+    public boolean isDeleted() {
+        return isDeleted;
+    }
+
+    public void setDeleted(boolean isDeleted) {
+        this.isDeleted = isDeleted;
+    }
+
+    public LocalDateTime getCreatedDate() {
+        return createdDate;
+    }
+
+    public void setCreatedDate(LocalDateTime createdDate) {
+        this.createdDate = createdDate;
+    }
+
+    public LocalDateTime getExpiryDate() {
+        return expiryDate;
+    }
+
+    public void setExpiryDate(LocalDateTime expiryDate) {
+        this.expiryDate = expiryDate;
+    }
+
+    public int getAdminId() {
+        return adminId;
+    }
+
+    public void setAdminId(int adminId) {
+        this.adminId = adminId;
+    }
+
+    public Long getPreviousId() {
+        return previousId;
+    }
+
+    public void setPreviousId(Long previousId) {
+        this.previousId = previousId;
     }
     
 }
