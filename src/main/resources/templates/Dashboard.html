@@ -103,6 +103,13 @@
                         <div class="text-right">
                             <a class="btn" th:href="'/edit/' + ${scale.id} + '?AdminId=' + ${AdminId}">Edit</a>
                             <a class="btn btn-blue" th:href="'/view/' + ${scale.id} + '?AdminId=' + ${AdminId}">View Records</a>
+                            <button id="shareButton" class="btn">Share</button>
+                        </div>
+                        <div id="sharePopup" style="display: none;">
+                            <a id="shareLink" href="https://example.com">Example Link</a>
+                            <button class="btn" data-clipboard-target="#shareLink">Copy</button>
+                            <img id="shareImage" src="image.jpg" alt="Example Image">
+                            <button class="btn" data-clipboard-target="#shareImage">Copy</button>
                         </div>
                     </div>
                     
@@ -110,5 +117,15 @@
             </th:block>
         </div>
     </div>
+    <script src="https://cdn.jsdelivr.net/clipboard.js/2.0.0/clipboard.min.js"></script>
+    <script>
+        var btn = document.getElementById('shareButton');
+        var popup = document.getElementById('sharePopup');
+        btn.onclick = function() {
+            popup.style.display = 'block';
+        }
+
+        new ClipboardJS('.btn');
+    </script>
 </body>
 </html>
