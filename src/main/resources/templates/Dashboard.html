@@ -93,7 +93,7 @@
 
         <!-- Qustionnair display -->
         <div class="container">
-            <th:block th:each="scale : ${scales}">
+            <th:block th:each="scale, stat : ${scales}">
                 <div class="card" style="margin-bottom: 20px; background-color: #e9ecef;">
                     <div class="card-body">
                         <div>
@@ -103,28 +103,34 @@
                         <div class="text-right">
                             <a class="btn" th:href="'/edit/' + ${scale.id} + '?AdminId=' + ${AdminId}">Edit</a>
                             <a class="btn btn-blue" th:href="'/view/' + ${scale.id} + '?AdminId=' + ${AdminId}">View Records</a>
-                            <button id="shareButton" class="btn">Share</button>
-                        </div>
-                        <div id="sharePopup" style="display: none;">
-                            <a id="shareLink" href="https://example.com">Example Link</a>
-                            <button class="btn" data-clipboard-target="#shareLink">Copy</button>
-                            <img id="shareImage" src="image.jpg" alt="Example Image">
-                            <button class="btn" data-clipboard-target="#shareImage">Copy</button>
+                            <button class="btn" data-toggle="modal" th:attr="data-target='#shareModal' + ${stat.index}">Share</button>
                         </div>
                     </div>
-                    
+                </div>
+
+                <div class="modal fade" th:id="'shareModal' + ${stat.index}" tabindex="-1" role="dialog" aria-labelledby="shareModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="shareModalLabel">Share</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <a id="shareLink" href="https://example.com">Example Link</a>
+                                <button class="btn" data-clipboard-target="#shareLink">Copy</button>
+                                <img id="shareImage" src="image.jpg" alt="Example Image">
+                                <button class="btn" data-clipboard-target="#shareImage">Copy</button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </th:block>
         </div>
     </div>
     <script src="https://cdn.jsdelivr.net/clipboard.js/2.0.0/clipboard.min.js"></script>
     <script>
-        var btn = document.getElementById('shareButton');
-        var popup = document.getElementById('sharePopup');
-        btn.onclick = function() {
-            popup.style.display = 'block';
-        }
-
         new ClipboardJS('.btn');
     </script>
 </body>
