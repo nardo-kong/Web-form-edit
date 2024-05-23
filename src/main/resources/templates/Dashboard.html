@@ -103,34 +103,32 @@
                         <div class="text-right">
                             <a class="btn" th:href="'/edit/' + ${scale.id} + '?AdminId=' + ${AdminId}">Edit</a>
                             <a class="btn btn-blue" th:href="'/view/' + ${scale.id} + '?AdminId=' + ${AdminId}">View Records</a>
-                            <button class="btn" data-toggle="modal" th:attr="data-target='#shareModal' + ${stat.index}">Share</button>
+                            <button type="button" class="btn" th:id="'shareButton' + ${stat.index}">Share</button>
                         </div>
                     </div>
                 </div>
-
-                <div class="modal fade" th:id="'shareModal' + ${stat.index}" tabindex="-1" role="dialog" aria-labelledby="shareModalLabel" aria-hidden="true">
-                    <div class="modal-dialog" role="document">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="shareModalLabel">Share</h5>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                            </div>
-                            <div class="modal-body">
-                                <a id="shareLink" href="https://example.com">Example Link</a>
-                                <button class="btn" data-clipboard-target="#shareLink">Copy</button>
-                                <img id="shareImage" src="image.jpg" alt="Example Image">
-                                <button class="btn" data-clipboard-target="#shareImage">Copy</button>
-                            </div>
-                        </div>
-                    </div>
+        
+                <div id="myPopup" th:id="'sharePopup' + ${stat.index}" style="display: none;">
+                    <a id="shareLink" href="https://example.com">Example Link</a>
+                    <button class="btn" data-clipboard-target="#shareLink">Copy Link</button>
+                    <img id="shareImage" src="image.jpg" alt="Example Image">
+                    <button class="btn" data-clipboard-target="#shareImage">Copy Image</button>
                 </div>
             </th:block>
         </div>
     </div>
     <script src="https://cdn.jsdelivr.net/clipboard.js/2.0.0/clipboard.min.js"></script>
     <script>
+        var buttons = document.querySelectorAll('.btn');
+        buttons.forEach(function(btn) {
+            var popup = document.getElementById('sharePopup' + btn.id.replace('shareButton', ''));
+            btn.onclick = function() {
+                var isExpanded = btn.getAttribute('aria-expanded') === 'true';
+                btn.setAttribute('aria-expanded', !isExpanded);
+                popup.style.display = isExpanded ? 'none' : 'block';
+            }
+        });
+
         new ClipboardJS('.btn');
     </script>
 </body>
