@@ -124,12 +124,14 @@
                         <div class="text-right">
                             <a class="btn" th:href="'/edit/' + ${scale.id} + '?AdminId=' + ${AdminId}">Edit</a>
                             <a class="btn btn-blue" th:href="'/view/' + ${scale.id} + '?AdminId=' + ${AdminId}">View Records</a>
-                            <button type="button" class="btn" th:id="'shareButton' + ${stat.index}">Share</button>
-                            <div id="sharePopup" th:id="'sharePopup' + ${stat.index}" class="share-popup">
-                                <a id="shareLink" href="https://example.com">Example Link</a>
-                                <button class="btn" data-clipboard-target="#shareLink">Copy Link</button>
-                                <img id="shareImage" src="image.jpg" alt="Example Image">
-                                <button class="btn" data-clipboard-target="#shareImage">Copy Image</button>
+                            <div class="share-button" th:id="'shareButton' + ${stat.index}">
+                                <button type="button" class="btn">Share</button>
+                                <div id="sharePopup" th:id="'sharePopup' + ${stat.index}" class="share-popup">
+                                    <a id="shareLink" href="https://example.com">Example Link</a>
+                                    <button class="btn" data-clipboard-target="#shareLink">Copy Link</button>
+                                    <img id="shareImage" src="image.jpg" alt="Example Image">
+                                    <button class="btn" data-clipboard-target="#shareImage">Copy Image</button>
+                                </div>
                             </div>
                         </div>
                     </div>
