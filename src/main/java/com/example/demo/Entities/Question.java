@@ -26,6 +26,8 @@ public class Question {
 
     private int page;
 
+    private String imageUrl;
+
     @OneToMany
     @JoinColumn(name = "question_id")
     private List<Option> options;
@@ -81,6 +83,14 @@ public class Question {
 
     public void setPage(int page) {
         this.page = page;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 
 }
