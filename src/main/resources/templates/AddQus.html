@@ -4,6 +4,7 @@
     <title>Form Edit</title>
     <script src="/js/jquery-3.5.1.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/@mdi/font/css/materialdesignicons.min.css" rel="stylesheet">
     <style>
 
         /* Style for main container */
@@ -20,7 +21,7 @@
         /* Style for input fields */
         .input{
             text-align: center;
-            padding: 14px 60px;
+            padding: 14px 25px;
             
             border-radius: 6px;
             border: 1px solid #DDE3EC;
@@ -73,11 +74,23 @@
             cursor: pointer;
         }
 
-        /* Style for trash and plus icon */
-        .delete-button, .add-button{
+        /* Style for trash, plus and img icon */
+        .delete-button, .add-button {
             border: none;
             background: none;
             font-size: 20px;
+        }
+        .img-button {
+            border: none;
+            background: none;
+            margin-left: 10px;
+            margin-right: 10px;
+            padding: 2px;
+            width: 40px;
+            height: 40px;
+            font-size: 30px;
+            transition: color 0.5s;
+            border-radius: 100%;
         }
         .delete-button .fas.fa-trash {
             color: rgb(215, 68, 68);
@@ -96,6 +109,18 @@
         .add-button .fas.fa-plus:hover {
             color: rgb(36, 173, 36);
             transform: scale(1.2);
+        }
+        .img-button .mdi.mdi-image-outline {
+            color: #3a3a3a;
+            transition: color 0.2s, transform 0.2s;
+            cursor: pointer;
+        }
+        .img-button:hover {
+            background-color: #f3f3f3;
+        }
+        .img-button .mdi.mdi-image-outline:hover {
+            color: #000000;
+            transform: scale(0.8);
         }
 
         /* Style for buttons */
@@ -153,6 +178,7 @@
             display: flex;
             flex-direction: column;
             align-items: center;
+            width: 480px;
             gap: 10px;
             border: 1px solid #ccc;
             border-radius: 10px;
@@ -195,12 +221,20 @@
                         <div class="question-content" name="question-content">
                             <div>
                                 <input type="text" class="input" name="question" placeholder="Question" required>
+                                <button type="button" class="img-button" onclick="openImageUploadModal()">
+                                    <i class="mdi mdi-image-outline"></i>
+                                </button>
                                 <select name="type" onchange="handleSelectChange(this)">
                                     <option value="" selected disabled hidden>Select a type</option>
                                     <option value="text">Short Question</option>
                                     <option value="select">Multiple Choice</option>
                                     <option value="likert5">Linear Scale</option>
                                 </select>
+                            </div>
+
+                            <input type="hidden" name="imgUrl">
+                            <div name="img-container">
+                                
                             </div>
                             
                             <div id="option-list" class="option-list">
@@ -241,12 +275,20 @@
                     <div class="question-content" name="question-content">
                         <div>
                             <input type="text" class="input" name="question" placeholder="Question" required>
+                            <button type="button" class="img-button" onclick="openImageUploadModal()">
+                                <i class="mdi mdi-image-outline"></i>
+                            </button>
                             <select name="type" onchange="handleSelectChange(this)">
                                 <option value="" selected disabled hidden>Select a type</option>
                                 <option value="text">Short Question</option>
                                 <option value="select">Multiple Choice</option>
                                 <option value="likert5">Linear Scale</option>
                             </select>
+                        </div>
+
+                        <input type="hidden" name="imgUrl">
+                        <div name="img-container">
+                                
                         </div>
                         
                         <div id="option-list" class="option-list">
@@ -274,12 +316,20 @@
                     <div class="question-content" name="question-content">
                         <div>
                             <input type="text" class="input" name="question" placeholder="Question" required>
+                            <button type="button" class="img-button" onclick="openImageUploadModal()">
+                                <i class="mdi mdi-image-outline"></i>
+                            </button>
                             <select name="type" onchange="handleSelectChange(this)">
                                 <option value="" selected disabled hidden>Select a type</option>
                                 <option value="text">Short Question</option>
                                 <option value="select">Multiple Choice</option>
                                 <option value="likert5">Linear Scale</option>
                             </select>
+                        </div>
+
+                        <input type="hidden" name="imgUrl">
+                        <div name="img-container">
+                                
                         </div>
                         
                         <div id="option-list" class="option-list">
@@ -342,6 +392,167 @@
             }
         }
 
+        // Function to handle image upload
+        function openImageUploadModal() {
+
+            // 创建遮挡层
+            const overlay = document.createElement('div');
+            overlay.style.position = 'fixed';
+            overlay.style.top = '0';
+            overlay.style.left = '0';
+            overlay.style.width = '100vw';
+            overlay.style.height = '100vh';
+            overlay.style.backgroundColor = 'rgba(0, 0, 0, 0.5)'; // 半透明背景
+            overlay.style.zIndex = '999'; // 确保遮挡层位于弹窗下方
+
+            // 创建弹窗
+            const modal = document.createElement('div');
+            modal.style.position = 'fixed';
+            modal.style.left = '50%';
+            modal.style.top = '50%';
+            modal.style.transform = 'translate(-50%, -50%)';
+            modal.style.backgroundColor = '#fff';
+            modal.style.padding = '20px';
+            modal.style.borderRadius = '10px';
+            modal.style.boxShadow = '0 4px 6px rgba(0, 0, 0, 0.1)';
+            modal.style.zIndex = '1000';
+            modal.style.width = '40vw';
+            modal.style.height = '40vh';
+
+            // 创建拖拽上传区域
+            const dragDropArea = document.createElement('input');
+            dragDropArea.textContent = 'Drag and drop an image here, or use the "Select File" button below.';
+            dragDropArea.style.height = '80%'; // 分配大部分空间给拖拽区域
+            dragDropArea.style.width = '100%';
+            dragDropArea.style.border = '2px dashed #007bff'; // 蓝色虚线边框
+            dragDropArea.style.borderRadius = '5px';
+            dragDropArea.style.display = 'flex';
+            dragDropArea.style.alignItems = 'center';
+            dragDropArea.style.justifyContent = 'center';
+            dragDropArea.style.marginBottom = '10px';
+            dragDropArea.style.color = '#007bff';
+            dragDropArea.style.fontSize = '16px';
+            dragDropArea.type = 'file';
+            dragDropArea.accept = 'image/*';
+
+            let selectFile;
+
+            dragDropArea.onchange = function(event) {
+                // 处理文件上传
+                selectFile = event.target.files[0];
+                console.log(selectFile);
+                // 可以在这里添加上传逻辑
+            };
+
+            // 找到对应元素
+            const questionContent = event.target.parentElement.parentElement.parentElement;
+            if (!questionContent) {
+                console.error('questionContent not found.');
+            } else {
+                console.log('questionContent:', questionContent);
+            }
+
+            // 创建上传按钮
+            const uploadButton = document.createElement('button');
+            uploadButton.textContent = 'Upload';
+            uploadButton.style.padding = '10px 20px';
+            uploadButton.style.borderRadius = '5px';
+            uploadButton.style.border = 'none';
+            uploadButton.style.color = 'white';
+            uploadButton.style.backgroundColor = '#007bff'; // 蓝色背景
+            uploadButton.style.cursor = 'pointer'; // 鼠标悬停时显示指针
+            uploadButton.onclick = function() {
+                // 在这里添加上传逻辑
+                if (selectFile) {
+                    console.log('Uploading...', selectFile);
+
+                    // 创建遮挡层
+                    const overlaylay = document.createElement('div');
+                    overlaylay.style.position = 'fixed';
+                    overlaylay.style.top = '0';
+                    overlaylay.style.left = '0';
+                    overlaylay.style.width = '100%';
+                    overlaylay.style.height = '100%';
+                    overlaylay.style.backgroundColor = 'rgba(0, 0, 0, 0.5)';
+                    overlaylay.style.display = 'flex';
+                    overlaylay.style.justifyContent = 'center';
+                    overlaylay.style.alignItems = 'center';
+                    overlaylay.style.zIndex = '1000';
+                    overlaylay.innerHTML = '<div style="color: white; font-size: 20px;">Uploading...</div>';
+                    document.body.appendChild(overlaylay);
+                    console.log('overlaylay:', overlaylay);
+
+                    const formData = new FormData();
+                    formData.append('file', selectFile);
+
+                    fetch('/uploadimg', {
+                        method: 'POST',
+                        body: formData
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log(data);
+                        if (data.success) {
+                            // 在这里处理上传成功后的逻辑
+
+                            // 储存图片url
+                            const imgUrlInput = questionContent.querySelector('input[name="imgUrl"]');
+                            if (imgUrlInput) {
+                                imgUrlInput.value = data.url;
+                            } else {
+                                console.error('Image URL input not found.');
+                            }
+                            
+
+                            // 显示图片
+                            const imgContainer = questionContent.querySelector('[name="img-container"]');
+                            if (imgContainer) {
+                                imgContainer.innerHTML = '';
+                                const img = document.createElement('img');
+                                img.src = data.url;
+                                img.style.width = '100%';
+                                imgContainer.appendChild(img);
+                            } else {
+                                console.error('Image container not found.');
+                            }
+
+                            // 关闭弹窗
+                            document.body.removeChild(modal);
+                            document.body.removeChild(overlay);
+                            document.body.removeChild(overlaylay);
+                        } else {
+                            alert('Upload failed. Please try again.');
+                        }
+                    })
+                    .catch(error => {
+                        console.error(error);
+                        // 在这里处理上传失败后的逻辑
+                    });
+                } else {
+                    console.log('No file selected.');
+                }
+                
+            };
+
+            // 将元素添加到弹窗
+            modal.appendChild(dragDropArea);
+            //modal.appendChild(selectFileButton);
+            modal.appendChild(uploadButton);
+            //modal.appendChild(fileInput); // 隐藏的文件输入
+
+            // 显示遮挡层和弹窗
+            document.body.appendChild(overlay);
+            document.body.appendChild(modal);
+
+            // 点击遮挡层关闭弹窗和遮挡层
+            overlay.addEventListener('click', function() {
+                document.body.removeChild(modal);
+                document.body.removeChild(overlay);
+            });
+        }
+
+
+        // Function to handle form submission
         document.querySelector('form').addEventListener('submit', function(event) {
             // Prevent the form from being submitted normally
             event.preventDefault();
@@ -354,6 +565,7 @@
             var questions = Array.from(questionElements).map(element => {
                 var questionText = element.querySelector('input[name="question"]').value;
                 var questionType = element.querySelector('select[name="type"]').value;
+                var imgUrl = element.querySelector('input[name="imgUrl"]').value;
                 var optionElements = element.querySelectorAll('input[name="option"]');
                 var options = Array.from(optionElements).map(option => option.value);
                 var questionPage = element.querySelector('input[name="page"]').value;
@@ -361,6 +573,7 @@
                 return {
                     text: questionText,
                     type: questionType,
+                    imageUrl: imgUrl,
                     options: options,
                     page: questionPage
                 };
