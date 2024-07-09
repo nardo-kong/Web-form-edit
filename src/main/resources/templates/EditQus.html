@@ -189,13 +189,24 @@
             border-left: 5px solid blue;
         }
 
-            /* Style for options */
+        /* Style for options */
         .option-list {
             width: 100%;
             display: flex;
             flex-direction: column;
             align-items: start;
             gap: 10px;
+        }
+
+        /* Image display for question */
+        .img-display-container {
+            display: flex;
+            justify-content: center;
+            margin: 10px 0 20px;
+        }
+        .img-display {
+            width: 90%;
+            height: auto;
         }
 
 
@@ -233,9 +244,9 @@
                                 </select>
                             </div>
 
-                            <input type="hidden" name="imgUrl">
-                            <div name="img-container">
-                                
+                            <input type="hidden" name="imgUrl" th:value="${question.imageUrl}">
+                            <div name="img-container" class="img-display-container">
+                                <img th:if="${question.imageUrl}" th:src="${question.imageUrl}" class="img-display">
                             </div>
                             
                             <div id="option-list" class="option-list" th:attr="data-question-id=${question.id}">
@@ -311,7 +322,7 @@
                         </div>
 
                         <input type="hidden" name="imgUrl">
-                        <div name="img-container">
+                        <div name="img-container" class="img-display-container">
                                 
                         </div>
                         
@@ -353,7 +364,7 @@
                         </div>
 
                         <input type="hidden" name="imgUrl">
-                        <div name="img-container">
+                        <div name="img-container" class="img-display-container">
                                 
                         </div>
                         
@@ -580,7 +591,8 @@
                                 imgContainer.innerHTML = '';
                                 const img = document.createElement('img');
                                 img.src = data.url;
-                                img.style.width = '100%';
+                                img.style.width = '90%';
+                                img.style.height = 'auto';
                                 imgContainer.appendChild(img);
                             } else {
                                 console.error('Image container not found.');
@@ -627,6 +639,22 @@
         document.querySelector('form').addEventListener('submit', function(event) {
             // Prevent the form from being submitted normally
             event.preventDefault();
+
+            // Prevent multiple submissions and show a loading overlay
+            var overlay = document.createElement('div');
+            overlay.setAttribute('id', 'uploadOverlay');
+            overlay.style.position = 'fixed';
+            overlay.style.top = '0';
+            overlay.style.left = '0';
+            overlay.style.width = '100%';
+            overlay.style.height = '100%';
+            overlay.style.backgroundColor = 'rgba(0, 0, 0, 0.5)';
+            overlay.style.display = 'flex';
+            overlay.style.justifyContent = 'center';
+            overlay.style.alignItems = 'center';
+            overlay.style.zIndex = '1000';
+            overlay.innerHTML = '<div style="color: white; font-size: 20px;">Submitting...</div>';
+            document.body.appendChild(overlay);
         
             // Collect the data
             var scale = document.getElementsByName("title")[0].value;
