@@ -155,6 +155,27 @@ public class HomeController {
         return "EditQus";
     }
     
+    @GetMapping("/history/{id}")
+    public String viewHistory(@PathVariable Long id, Model model, @RequestParam(required = true) int AdminId) {
+        // 1. 根据scale-id查询所有previous scale-id
+        List<Scale> scaleHistory = new ArrayList<>();
+        Scale scale = scaleRepository.findById(id).get();
+        scaleHistory.add(scale);
+        while (scale.getPreviousId() != null) {
+            scale = scaleRepository.findById(scale.getPreviousId()).get();
+            scaleHistory.add(scale);
+        }
+        Map<Long, Integer> completedCounts = new HashMap<>();
+    
+        for (Scale scalecopy : scaleHistory) {
+            int count = answerRecordRepository.countByScaleIdAndCompleted(scalecopy.getId(), true);
+            completedCounts.put(scalecopy.getId(), count);
+        }
+        model.addAttribute("scaleHistory", scaleHistory);
+        model.addAttribute("completedCounts", completedCounts);
+        model.addAttribute("AdminId", AdminId);
+        return "ScaleHistory";
+    }
 
     
     public String hashPassword(String password) {

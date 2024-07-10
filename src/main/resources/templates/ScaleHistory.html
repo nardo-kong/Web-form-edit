@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<title>Scale History</title>
+    <link href="https://cdn.materialdesignicons.com/5.4.55/css/materialdesignicons.min.css" rel="stylesheet">
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: center;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        tr:hover {
+            background-color: #e8e8e8;
+        }
+        .btn-cell {
+            border: none;
+            background-color: transparent;
+        }
+
+        .iconbtn {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 30px; /* 设置宽度 */
+            height: 30px; /* 设置高度为与宽度相同的值，使其成为正方形 */
+            font-size: 20px;
+            text-decoration: none;
+            border-radius: 8px;
+            padding: 0; /* 移除padding，因为flex布局已经确保内容居中 */
+            border: 1px solid #c7c7c7;
+            font-weight: 500;
+            color: white;
+            cursor: pointer;
+        }
+        .iconbtn i {
+            font-weight: bold;
+        }
+        .btn-gray {
+            background-color: #f2f2f2;
+            color: #464646;
+        }
+        .btn-gray:hover {
+            background-color: #e5e5e5;
+        }
+
+    </style>
+</head>
+<body>
+<h2>Scale History</h2>
+<div th:if="${not #lists.isEmpty(scaleHistory)}">
+	<table>
+		<thead>
+			<tr>
+				<th>Scale ID</th>
+                <th>Completed</th>
+				<th>Title</th>
+				<th>Pages</th>
+				<th>Valid</th>
+				<th>Created Date</th>
+				<th>Expiry Date</th>
+				<th>AdminID</th>
+				<th>Previous ID</th>
+				<th class="btn-cell"></th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr th:each="scale : ${scaleHistory}">
+				<td th:text="${scale.id}"></td>
+                <td th:text="${completedCounts[scale.id]}"></td>
+				<td th:text="${scale.title}"></td>
+				<td th:text="${scale.totalPage}"></td>
+				<td th:text="${scale.isDeleted} ? 'x' : '√'"></td>
+				<td th:text="${scale.createdDate}"></td>
+				<td th:text="${scale.expiryDate}"></td>
+				<td th:text="${scale.adminId}"></td>
+				<td th:text="${scale.previousId != null ? scale.previousId : '-'}"></td>
+                <td class="btn-cell">
+                    <a class="iconbtn btn-gray" th:href="'/view/' + ${scale.id} + '?AdminId=' + ${AdminId}">
+                        <i class="mdi mdi-file-document-edit-outline"></i>
+                    </a>
+                </td>
+			</tr>
+		</tbody>
+	</table>
+</div>
+<div th:if="${#lists.isEmpty(scaleHistory)}">
+	<p>没有找到历史版本。</p>
+</div>
+</body>
+</html>
