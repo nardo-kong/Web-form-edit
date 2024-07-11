@@ -196,8 +196,9 @@
                         <div class="text-right">
                             <a class="btn" th:href="'/edit/' + ${scale.id} + '?AdminId=' + ${AdminId}">Edit</a>
                             <a class="btn btn-blue" th:href="'/view/' + ${scale.id} + '?AdminId=' + ${AdminId}">Answers</a>
-                            <a class="iconbtn btn-gray" th:href="'/history/' + ${scale.id} + '?AdminId=' + ${AdminId}">
+                            <a class="iconbtn btn-gray" th:href="@{'/history/' + ${scale.id} + '?AdminId=' + ${AdminId}}">
                                 <i class="mdi mdi-history"></i>
+                                <span th:text="' ' + ${historyNums[scale.title]}" style="font-size: 16px;"></span>
                             </a>
                             <div class="share-button" th:id="'shareButton' + ${stat.index}">
                                 <button type="button" style="max-width: 100%;" class="iconbtn btn-gray">

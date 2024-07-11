@@ -41,6 +41,8 @@ public class HomeController {
     private AnswerService answerService;
     @Autowired
     private QuestionService questionService;
+    @Autowired
+    private ScaleService ScaleService;
 
     @GetMapping("/")
     public String home() {
@@ -65,14 +67,18 @@ public class HomeController {
     public String dashboard(@RequestParam(required = true) int AdminId, Model model) {
         List<Scale> scales = scaleRepository.findByAdminIdAndIsDeleted(AdminId, false);
         Map<String, Integer> completedCounts = new HashMap<>();
+        Map<String, Integer> historyNums = new HashMap<>();
     
         for (Scale scale : scales) {
             int count = answerRecordRepository.countByScaleIdAndCompleted(scale.getId(), true);
             completedCounts.put(scale.getTitle(), count);
+            int historyNum = ScaleService.getScaleHistoryNum(scale.getId());
+            historyNums.put(scale.getTitle(), historyNum);
         }
     
         model.addAttribute("scales", scales);
         model.addAttribute("completedCounts", completedCounts);
+        model.addAttribute("historyNums", historyNums);
         model.addAttribute("AdminId", AdminId);
     
         return "Dashboard";
@@ -157,20 +163,17 @@ public class HomeController {
     
     @GetMapping("/history/{id}")
     public String viewHistory(@PathVariable Long id, Model model, @RequestParam(required = true) int AdminId) {
-        // 1. 根据scale-id查询所有previous scale-id
-        List<Scale> scaleHistory = new ArrayList<>();
-        Scale scale = scaleRepository.findById(id).get();
-        scaleHistory.add(scale);
-        while (scale.getPreviousId() != null) {
-            scale = scaleRepository.findById(scale.getPreviousId()).get();
-            scaleHistory.add(scale);
-        }
+        // 1. 获取scale的历史版本
+        List<Scale> scaleHistory = ScaleService.findScaleHistoryById(id);
+
+        // 2. 对于每个scale，查询已完成的answer-record数量
         Map<Long, Integer> completedCounts = new HashMap<>();
-    
         for (Scale scalecopy : scaleHistory) {
             int count = answerRecordRepository.countByScaleIdAndCompleted(scalecopy.getId(), true);
             completedCounts.put(scalecopy.getId(), count);
         }
+
+
         model.addAttribute("scaleHistory", scaleHistory);
         model.addAttribute("completedCounts", completedCounts);
         model.addAttribute("AdminId", AdminId);

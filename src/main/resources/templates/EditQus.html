@@ -49,7 +49,8 @@
         }
 
         .input.title {
-            width: 68%;
+            width: 76%;
+            font-size: 20px;
             box-sizing: border-box;
         }
 
@@ -57,6 +58,17 @@
             width: 20%;
             box-sizing: border-box;
             padding: 14px 2px;
+        }
+        textarea.input {
+            font-family: Arial, sans-serif; /* 设置字体 */
+            padding: 14px 14px;
+            min-height: 50px; /* 设置最小高度 */
+            font-size: 16px; /* 设置字体大小 */
+            font-weight: normal; /* 设置字体粗细，可选值有 normal, bold, 100, 200, ... 900 */
+            text-align: left; /* 设置文本对齐方式 */
+            width: 300px; /* 设置宽度为100%，根据需要调整 */
+            box-sizing: border-box; /* 确保宽度包括padding和border，防止布局问题 */
+            resize: none; /* 允许垂直调整大小，可选值有 none, both, horizontal, vertical */
         }
 
 
@@ -178,7 +190,7 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            width: 480px;
+            width: 550px;
             gap: 10px;
             border: 1px solid #ccc;
             border-radius: 10px;
@@ -205,7 +217,7 @@
             margin: 10px 0 20px;
         }
         .img-display {
-            width: 90%;
+            width: 80%;
             height: auto;
         }
 
@@ -231,11 +243,13 @@
                 <div id="question-list" class="question-list">
                     <div class="question-container" th:each="question : ${questions}">
                         <div class="question-content" name="question-content">
-                            <div style="display: flex; align-items: center;">
-                                <input type="text" class="input" name="question" th:value="${question.text}" placeholder="Question" required>
-                                <button type="button" class="img-button" onclick="openImageUploadModal()">
-                                    <i class="mdi mdi-image-outline"></i>
-                                </button>
+                            <div style="display: flex; align-items: flex-start;">
+                                <textarea class="input" name="question" placeholder="Question" required th:text="${question.text}"></textarea>
+                                <div style="display: flex; align-items: center; height: 50px;">
+                                    <button type="button" class="img-button" onclick="openImageUploadModal()">
+                                        <i class="mdi mdi-image-outline"></i>
+                                    </button>
+                                </div>
                                 <select name="type" onchange="handleSelectChange(this)" th:attr="data-question-id=${question.id}">
                                     <option value="" selected disabled hidden>Select a type</option>
                                     <option value="text" th:selected="${question.type == 'text'}">Short Question</option>
@@ -308,11 +322,13 @@
             let newInput = `
                 <div class="question-container">
                     <div class="question-content" name="question-content">
-                        <div>
-                            <input type="text" class="input" name="question" placeholder="Question" required>
-                            <button type="button" class="img-button" onclick="openImageUploadModal()">
-                                <i class="mdi mdi-image-outline"></i>
-                            </button>
+                        <div style="display: flex; align-items: flex-start;">
+                            <textarea class="input" name="question" placeholder="Question" required></textarea>
+                            <div style="display: flex; align-items: center; height: 50px;">
+                                <button type="button" class="img-button" onclick="openImageUploadModal()">
+                                    <i class="mdi mdi-image-outline"></i>
+                                </button>
+                            </div>
                             <select name="type" onchange="handleSelectChange(this)">
                                 <option value="" selected disabled hidden>Select a type</option>
                                 <option value="text">Short Question</option>
@@ -350,11 +366,13 @@
             let newInput = `
                 <div class="question-container">
                     <div class="question-content" name="question-content">
-                        <div>
-                            <input type="text" class="input" name="question" placeholder="Question" required>
-                            <button type="button" class="img-button" onclick="openImageUploadModal()">
-                                <i class="mdi mdi-image-outline"></i>
-                            </button>
+                        <div style="display: flex; align-items: flex-start;">
+                            <textarea class="input" name="question" placeholder="Question" required></textarea>
+                            <div style="display: flex; align-items: center; height: 50px;">
+                                <button type="button" class="img-button" onclick="openImageUploadModal()">
+                                    <i class="mdi mdi-image-outline"></i>
+                                </button>
+                            </div>
                             <select name="type" onchange="handleSelectChange(this)">
                                 <option value="" selected disabled hidden>Select a type</option>
                                 <option value="text">Short Question</option>
@@ -633,6 +651,27 @@
             });
         }
 
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            // 页面加载完成后，找到所有的<textarea>元素
+            var textareas = document.querySelectorAll('textarea');
+            // 遍历每个<textarea>元素，并调用autoResizeTextarea函数
+            textareas.forEach(function(textarea) {
+                autoResizeTextarea(textarea);
+            });
+        });
+        document.addEventListener('input', function(event) {
+            if (event.target.tagName.toLowerCase() !== 'textarea') return;
+            autoResizeTextarea(event.target);
+        });
+
+        function autoResizeTextarea(textarea) {
+            textarea.style.height = 'auto'; // 重置高度，允许它缩小
+            textarea.rows = 1; // 重置行数，允许它缩小
+            textarea.style.overflowY = 'hidden'; // 隐藏滚动条
+            textarea.style.height = textarea.scrollHeight + 'px'; // 设置为实际需要的高度
+        }
+
 
 
         // Function to handle form submission
@@ -663,7 +702,7 @@
             var questionElements = document.getElementsByName("question-content");
 
             var questions = Array.from(questionElements).map(element => {
-                var questionText = element.querySelector('input[name="question"]').value;
+                var questionText = element.querySelector('textarea[name="question"]').value;
                 var questionType = element.querySelector('select[name="type"]').value;
                 var imgUrl = element.querySelector('input[name="imgUrl"]').value;
                 var optionElements = element.querySelectorAll('input[name="option"]');
