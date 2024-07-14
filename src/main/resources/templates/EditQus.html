@@ -13,6 +13,7 @@
             justify-content: center;
             align-items: center;
             padding: 48px;
+            margin-top: 20px;
         }
         .form-wrapper {
             width: 80%;
@@ -226,12 +227,102 @@
             background-color: #f6f1f7;
         }
 
+        /* Styles for the top bar */
+        .top-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background-color: rgb(255, 255, 255);
+            height: 50px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 4px 0 rgba(0,0,0,0.1);
+            z-index: 9999;
+        }
+        .top-bar .logo {
+            height: 100%;
+            padding: 0 2%;
+            display: flex;
+            align-items: center;
+            background-color: #6a64f1;
+        }
         
-            
+        .dropdown {
+            position: relative;
+            display: inline-block;
+            margin-right: 20px;
+        }
+        .iconbtn {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 50px; /* 设置宽度 */
+            height: 50px; /* 设置高度为与宽度相同的值，使其成为正方形 */
+            font-size: 25px;
+            text-decoration: none;
+            border-radius: 8px;
+            padding: 0; /* 移除padding，因为flex布局已经确保内容居中 */
+            border: 1px solid #c7c7c7;
+            font-weight: 500;
+            color: white;
+            cursor: pointer;
+            margin-top: 15px;
+        }
+        .btn-gray {
+            background-color: #f2f2f2;
+            color: #464646;
+        }
+        .btn-gray:hover {
+            background-color: #e5e5e5;
+        }
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #f9f9f9;
+            width: 400px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            padding: 12px 16px;
+            z-index: 1;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        .dropdown-content .musicUrl {
+            padding: 4px;
+            padding-inline: 5px;
+            border: 1px solid #9c9c9c;
+            border-radius: 5px;
+        }
+        .dropdown:hover .dropbtn {
+            background-color: #f1f1f1;
+        }
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+
         
     </style>
 </head>
 <body>
+    <div class="top-bar">
+        <div class="logo">
+            <img src="/Webform.png" alt="logo" style="height: 50%; filter: invert(1) brightness(1.5);"/>
+        </div>
+        <div style="display: flex; justify-content: flex-end;">
+
+
+            <div style="display: flex; align-items: center; gap: 10px; margin-right: 20px;">
+                <span th:text="${AdminId}"></span>
+                <div class="user-avatar" style="background-color: #123456; border-radius: 50%; width: 40px; height: 40px; color: white; display: flex; align-items: center; justify-content: center;">
+                    <i class="mdi mdi-account"></i>
+                </div>
+            </div>
+
+        
+        </div>
+
+    </div>
     <div class="main-warpper">
         <div class="form-wrapper">
             <form>
@@ -239,6 +330,29 @@
                     <input type="text" class="input title" name="title" placeholder="Title" th:value="${scaleTitle}" required>
                     <input type="hidden" name="AdminId" th:value="${AdminId}" />
                     <input type="hidden" name="previousId" th:value="${previousId}" />
+                    <div class="dropdown">
+                        <div class="iconbtn btn-gray" style="margin-top: 0; margin-left: 10px;">
+                            <i class="mdi mdi-cog"></i>
+                        </div>
+                        <div class="dropdown-content">
+                            <div style="display: flex; align-items: center; gap: 15px; margin: 5px 0;">
+                                <label for="control-group-color">对照组颜色:</label>
+                                <input type="color" id="control-group-color" name="cGroupBgColor">
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 15px; margin: 5px 0;">
+                                <label for="control-group-music">对照组音乐:</label>
+                                <input class="musicUrl" type="url" id="control-group-music" name="cGroupMusic">
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 15px; margin: 5px 0;">
+                                <label for="experiment-group-color">实验组颜色:</label>
+                                <input type="color" id="experiment-group-color" name="eGroupBgColor">
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 15px; margin: 5px 0;">
+                                <label for="experiment-group-music">实验组音乐:</label>
+                                <input class="musicUrl" type="url" id="experiment-group-music" name="eGroupMusic">
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div id="question-list" class="question-list">
                     <div class="question-container" th:each="question : ${questions}">
@@ -699,6 +813,11 @@
             var scale = document.getElementsByName("title")[0].value;
             var adminId = document.getElementsByName("AdminId")[0].value;
             var previousId = document.getElementsByName("previousId")[0].value;
+            var cGroupBgColor = document.getElementsByName("cGroupBgColor")[0].value;
+            var cGroupMusic = document.getElementsByName("cGroupMusic")[0].value;
+            var eGroupBgColor = document.getElementsByName("eGroupBgColor")[0].value;
+            var eGroupMusic = document.getElementsByName("eGroupMusic")[0].value;
+
             var questionElements = document.getElementsByName("question-content");
 
             var questions = Array.from(questionElements).map(element => {
@@ -742,7 +861,11 @@
                     title: scale,
                     totalPage: pages[pages.length - 1],
                     adminId: adminId,
-                    previousId: previousId
+                    previousId: previousId,
+                    cGroupBgColor: cGroupBgColor,
+                    cGroupMusic: cGroupMusic,
+                    eGroupBgColor: eGroupBgColor,
+                    eGroupMusic: eGroupMusic
                 },
                 questions: questions,
                 adminId: adminId

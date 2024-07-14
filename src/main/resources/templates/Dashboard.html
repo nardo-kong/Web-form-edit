@@ -3,7 +3,30 @@
 <head>
     <title>Dashboard</title>
     <link href="https://cdn.materialdesignicons.com/5.4.55/css/materialdesignicons.min.css" rel="stylesheet">
-    <!-- Add your CSS and JavaScript files here -->
+    <script>
+        function loadFallbackCSS() {
+            var link = document.createElement('link');
+            link.rel = 'stylesheet';
+            link.href = 'https://cdn.bootcdn.net/ajax/libs/MaterialDesign-Webfont/5.9.55/css/materialdesignicons.min.css';
+            document.head.appendChild(link);
+        }
+
+        function checkCSSLoaded() {
+            var testDiv = document.createElement('div');
+            testDiv.className = 'mdi mdi-account';
+            document.body.appendChild(testDiv);
+
+            setTimeout(function() {
+                var style = window.getComputedStyle(testDiv);
+                if (style.fontFamily !== 'Material Design Icons') {
+                    loadFallbackCSS();
+                }
+                document.body.removeChild(testDiv);
+            }, 1000);
+        }
+
+        window.onload = checkCSSLoaded;
+    </script>
     <style>
         .main-warpper {
             width: 60%;
