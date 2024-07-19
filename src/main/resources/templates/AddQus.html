@@ -271,6 +271,29 @@
                 <div style="display: flex; justify-content: center;">
                     <input type="text" class="input title" name="title" placeholder="Title" required>
                     <input type="hidden" name="AdminId" th:value="${AdminId}" />
+                    <div class="dropdown">
+                        <div class="iconbtn btn-gray" style="margin-top: 0; margin-left: 10px;">
+                            <i class="mdi mdi-cog"></i>
+                        </div>
+                        <div class="dropdown-content">
+                            <div style="display: flex; align-items: center; gap: 15px; margin: 5px 0;">
+                                <label for="control-group-color">Control group color:</label>
+                                <input type="color" id="control-group-color" name="cGroupBgColor" value="#E6E6FA">
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 15px; margin: 5px 0;">
+                                <label for="control-group-music">Control group music:</label>
+                                <input class="musicUrl" type="url" id="control-group-music" name="cGroupMusic">
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 15px; margin: 5px 0;">
+                                <label for="experiment-group-color">Experimental group color:</label>
+                                <input type="color" id="experiment-group-color" name="eGroupBgColor" value="#E6E6FA">
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 15px; margin: 5px 0;">
+                                <label for="experiment-group-music">Experimental group music:</label>
+                                <input class="musicUrl" type="url" id="experiment-group-music" name="eGroupMusic">
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div id="question-list" class="question-list">
                     <div class="question-container">
@@ -634,6 +657,12 @@
             // Collect the data
             var scale = document.getElementsByName("title")[0].value;
             var adminId = document.getElementsByName("AdminId")[0].value;
+
+            var cGroupBgColor = document.getElementsByName("cGroupBgColor")[0].value;
+            var cGroupMusic = document.getElementsByName("cGroupMusic")[0].value;
+            var eGroupBgColor = document.getElementsByName("eGroupBgColor")[0].value;
+            var eGroupMusic = document.getElementsByName("eGroupMusic")[0].value;
+
             var questionElements = document.getElementsByName("question-content");
 
             var questions = Array.from(questionElements).map(element => {
@@ -676,7 +705,11 @@
                 scale: {
                     title: scale,
                     totalPage: pages[pages.length - 1],
-                    adminId: adminId
+                    adminId: adminId,
+                    cGroupBgColor: cGroupBgColor,
+                    cGroupMusic: cGroupMusic,
+                    eGroupBgColor: eGroupBgColor,
+                    eGroupMusic: eGroupMusic
                 },
                 questions: questions,
             };
