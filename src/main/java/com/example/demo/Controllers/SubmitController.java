@@ -34,13 +34,26 @@ public class SubmitController {
     @PostMapping("/submit")
     public String submitQuestionnaire(@RequestBody Questionnaire questionnaire, Model model) {
         // Save the scale
+        Scale sourceScale = questionnaire.getScale();
         Scale scale = new Scale();
-        scale.setTitle(questionnaire.getScale().getTitle().toString());
-        scale.setTotalPage(questionnaire.getScale().getTotalPage());
+        scale.setTitle(sourceScale.getTitle().toString());
+        scale.setTotalPage(sourceScale.getTotalPage());
         scale.setDeleted(false);
         scale.setCreatedDate(java.time.LocalDateTime.now());
-        scale.setAdminId(questionnaire.getScale().getAdminId());
-        scale.setPreviousId(questionnaire.getScale().getPreviousId());
+        scale.setAdminId(sourceScale.getAdminId());
+        scale.setPreviousId(sourceScale.getPreviousId());
+        if (!sourceScale.getCGroupBgColor().isEmpty()) {
+            scale.setCGroupBgColor(sourceScale.getCGroupBgColor());
+        }
+        if (!sourceScale.getCGroupMusic().isEmpty()) {
+            scale.setCGroupMusic(sourceScale.getCGroupMusic());
+        }
+        if (!sourceScale.getEGroupBgColor().isEmpty()) {
+            scale.setEGroupBgColor(sourceScale.getEGroupBgColor());
+        }
+        if (!sourceScale.getEGroupMusic().isEmpty()) {
+            scale.setEGroupMusic(sourceScale.getEGroupMusic());
+        }
         scaleRepository.save(scale);
 
         // Save the questions

@@ -5,6 +5,8 @@ import java.util.List;
 
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 
 @Entity(name = "scales")
 public class Scale {
@@ -26,13 +28,17 @@ public class Scale {
 
     private Long previousId;
 
+    @JsonProperty("eGroupBgColor")
     private String eGroupBgColor;
 
+    @JsonProperty("cGroupBgColor")
     private String cGroupBgColor;
 
+    @JsonProperty("eGroupMusic")
     private String eGroupMusic;
 
-    private String cGroupMusic; 
+    @JsonProperty("cGroupMusic")
+    private String cGroupMusic;
 
     @OneToMany(mappedBy = "scale")
     private List<Question> questions;

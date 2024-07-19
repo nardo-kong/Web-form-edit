@@ -336,19 +336,19 @@
                         </div>
                         <div class="dropdown-content">
                             <div style="display: flex; align-items: center; gap: 15px; margin: 5px 0;">
-                                <label for="control-group-color">对照组颜色:</label>
-                                <input type="color" id="control-group-color" name="cGroupBgColor">
+                                <label for="control-group-color">Control group color:</label>
+                                <input type="color" id="control-group-color" name="cGroupBgColor" value="#E6E6FA">
                             </div>
                             <div style="display: flex; align-items: center; gap: 15px; margin: 5px 0;">
-                                <label for="control-group-music">对照组音乐:</label>
+                                <label for="control-group-music">Control group music:</label>
                                 <input class="musicUrl" type="url" id="control-group-music" name="cGroupMusic">
                             </div>
                             <div style="display: flex; align-items: center; gap: 15px; margin: 5px 0;">
-                                <label for="experiment-group-color">实验组颜色:</label>
-                                <input type="color" id="experiment-group-color" name="eGroupBgColor">
+                                <label for="experiment-group-color">Experimental group color:</label>
+                                <input type="color" id="experiment-group-color" name="eGroupBgColor" value="#E6E6FA">
                             </div>
                             <div style="display: flex; align-items: center; gap: 15px; margin: 5px 0;">
-                                <label for="experiment-group-music">实验组音乐:</label>
+                                <label for="experiment-group-music">Experimental group music:</label>
                                 <input class="musicUrl" type="url" id="experiment-group-music" name="eGroupMusic">
                             </div>
                         </div>
@@ -865,7 +865,8 @@
                     cGroupBgColor: cGroupBgColor,
                     cGroupMusic: cGroupMusic,
                     eGroupBgColor: eGroupBgColor,
-                    eGroupMusic: eGroupMusic
+                    eGroupMusic: eGroupMusic,
+                    color: "red"
                 },
                 questions: questions,
                 adminId: adminId
